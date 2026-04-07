@@ -1,0 +1,4180 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    CALL
+    COLON
+    LABEL
+    RETURN
+    STOP
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> program_unit_list
+Rule 2     program_unit_list -> program_unit_list program_unit
+Rule 3     program_unit_list -> program_unit
+Rule 4     program_unit -> PROGRAM ID newlines declaration_list statement_list END newlines
+Rule 5     program_unit -> PROGRAM ID newlines declaration_list statement_list END
+Rule 6     program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+Rule 7     program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+Rule 8     newlines -> NL
+Rule 9     newlines -> newlines NL
+Rule 10    declaration_list -> declaration_list declaration
+Rule 11    declaration_list -> <empty>
+Rule 12    declaration -> type_spec var_decl_list NL
+Rule 13    declaration -> type_spec var_decl_list LABEL_NL
+Rule 14    type_spec -> INTEGER
+Rule 15    type_spec -> REAL
+Rule 16    type_spec -> LOGICAL
+Rule 17    type_spec -> CHARACTER
+Rule 18    var_decl_list -> var_decl_list COMMA var_decl
+Rule 19    var_decl_list -> var_decl
+Rule 20    var_decl -> ID
+Rule 21    var_decl -> ID LPAREN dim_list RPAREN
+Rule 22    dim_list -> dim_list COMMA INT_LITERAL
+Rule 23    dim_list -> INT_LITERAL
+Rule 24    param_list -> param_list COMMA ID
+Rule 25    param_list -> ID
+Rule 26    param_list -> <empty>
+Rule 27    statement_list -> statement_list statement
+Rule 28    statement_list -> <empty>
+Rule 29    stmt_end -> NL
+Rule 30    stmt_end -> LABEL_NL
+Rule 31    statement -> opt_label ID EQUALS expr stmt_end
+Rule 32    statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end
+Rule 33    statement -> opt_label PRINT STAR COMMA print_list stmt_end
+Rule 34    statement -> opt_label PRINT STAR stmt_end
+Rule 35    print_list -> print_list COMMA expr
+Rule 36    print_list -> expr
+Rule 37    statement -> opt_label READ STAR COMMA read_list stmt_end
+Rule 38    read_list -> read_list COMMA var_ref
+Rule 39    read_list -> var_ref
+Rule 40    statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end
+Rule 41    statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+Rule 42    statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+Rule 43    statement -> opt_label GOTO INT_LITERAL stmt_end
+Rule 44    statement -> opt_label CONTINUE stmt_end
+Rule 45    opt_label -> INT_LITERAL
+Rule 46    opt_label -> <empty>
+Rule 47    expr -> expr PLUS expr
+Rule 48    expr -> expr MINUS expr
+Rule 49    expr -> expr STAR expr
+Rule 50    expr -> expr SLASH expr
+Rule 51    expr -> expr POWER expr
+Rule 52    expr -> expr EQ expr
+Rule 53    expr -> expr NE expr
+Rule 54    expr -> expr LT expr
+Rule 55    expr -> expr LE expr
+Rule 56    expr -> expr GT expr
+Rule 57    expr -> expr GE expr
+Rule 58    expr -> expr AND expr
+Rule 59    expr -> expr OR expr
+Rule 60    expr -> MINUS expr
+Rule 61    expr -> PLUS expr
+Rule 62    expr -> NOT expr
+Rule 63    expr -> LPAREN expr RPAREN
+Rule 64    expr -> INT_LITERAL
+Rule 65    expr -> REAL_LITERAL
+Rule 66    expr -> TRUE
+Rule 67    expr -> FALSE
+Rule 68    expr -> STRING_LITERAL
+Rule 69    expr -> var_ref
+Rule 70    var_ref -> ID
+Rule 71    var_ref -> ID LPAREN index_list RPAREN
+Rule 72    index_list -> index_list COMMA expr
+Rule 73    index_list -> expr
+
+Terminals, with rules where they appear
+
+AND                  : 58
+CALL                 : 
+CHARACTER            : 17
+COLON                : 
+COMMA                : 18 22 24 33 35 37 38 42 72
+CONTINUE             : 42 44
+DO                   : 42
+ELSE                 : 41
+END                  : 4 5 6 7
+ENDIF                : 40 41
+EQ                   : 52
+EQUALS               : 31 32 42
+FALSE                : 67
+FUNCTION             : 6
+GE                   : 57
+GOTO                 : 43
+GT                   : 56
+ID                   : 4 5 6 7 20 21 24 25 31 32 42 70 71
+IF                   : 40 41
+INTEGER              : 14
+INT_LITERAL          : 22 23 42 42 43 45 64
+LABEL                : 
+LABEL_NL             : 13 30
+LE                   : 55
+LOGICAL              : 16
+LPAREN               : 6 7 21 32 40 41 63 71
+LT                   : 54
+MINUS                : 48 60
+NE                   : 53
+NL                   : 8 9 12 29 40 41 41
+NOT                  : 62
+OR                   : 59
+PLUS                 : 47 61
+POWER                : 51
+PRINT                : 33 34
+PROGRAM              : 4 5
+READ                 : 37
+REAL                 : 15
+REAL_LITERAL         : 65
+RETURN               : 
+RPAREN               : 6 7 21 32 40 41 63 71
+SLASH                : 50
+STAR                 : 33 34 37 49
+STOP                 : 
+STRING_LITERAL       : 68
+SUBROUTINE           : 7
+THEN                 : 40 41
+TRUE                 : 66
+error                : 
+
+Nonterminals, with rules where they appear
+
+declaration          : 10
+declaration_list     : 4 5 6 7 10
+dim_list             : 21 22
+expr                 : 31 32 35 36 40 41 42 42 47 47 48 48 49 49 50 50 51 51 52 52 53 53 54 54 55 55 56 56 57 57 58 58 59 59 60 61 62 63 72 73
+index_list           : 32 71 72
+newlines             : 4 4 5 6 6 7 7 9
+opt_label            : 31 32 33 34 37 40 41 42 43 44
+param_list           : 6 7 24
+print_list           : 33 35
+program              : 0
+program_unit         : 2 3
+program_unit_list    : 1 2
+read_list            : 37 38
+statement            : 27
+statement_list       : 4 5 6 7 27 40 41 41 42
+stmt_end             : 31 32 33 34 37 40 41 42 42 43 44
+type_spec            : 6 12 13
+var_decl             : 18 19
+var_decl_list        : 12 13 18
+var_ref              : 38 39 69
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . program_unit_list
+    (2) program_unit_list -> . program_unit_list program_unit
+    (3) program_unit_list -> . program_unit
+    (4) program_unit -> . PROGRAM ID newlines declaration_list statement_list END newlines
+    (5) program_unit -> . PROGRAM ID newlines declaration_list statement_list END
+    (6) program_unit -> . type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+    (7) program_unit -> . SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+    (14) type_spec -> . INTEGER
+    (15) type_spec -> . REAL
+    (16) type_spec -> . LOGICAL
+    (17) type_spec -> . CHARACTER
+
+    PROGRAM         shift and go to state 4
+    SUBROUTINE      shift and go to state 6
+    INTEGER         shift and go to state 7
+    REAL            shift and go to state 8
+    LOGICAL         shift and go to state 9
+    CHARACTER       shift and go to state 10
+
+    program                        shift and go to state 1
+    program_unit_list              shift and go to state 2
+    program_unit                   shift and go to state 3
+    type_spec                      shift and go to state 5
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> program_unit_list .
+    (2) program_unit_list -> program_unit_list . program_unit
+    (4) program_unit -> . PROGRAM ID newlines declaration_list statement_list END newlines
+    (5) program_unit -> . PROGRAM ID newlines declaration_list statement_list END
+    (6) program_unit -> . type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+    (7) program_unit -> . SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+    (14) type_spec -> . INTEGER
+    (15) type_spec -> . REAL
+    (16) type_spec -> . LOGICAL
+    (17) type_spec -> . CHARACTER
+
+    $end            reduce using rule 1 (program -> program_unit_list .)
+    PROGRAM         shift and go to state 4
+    SUBROUTINE      shift and go to state 6
+    INTEGER         shift and go to state 7
+    REAL            shift and go to state 8
+    LOGICAL         shift and go to state 9
+    CHARACTER       shift and go to state 10
+
+    program_unit                   shift and go to state 11
+    type_spec                      shift and go to state 5
+
+state 3
+
+    (3) program_unit_list -> program_unit .
+
+    PROGRAM         reduce using rule 3 (program_unit_list -> program_unit .)
+    SUBROUTINE      reduce using rule 3 (program_unit_list -> program_unit .)
+    INTEGER         reduce using rule 3 (program_unit_list -> program_unit .)
+    REAL            reduce using rule 3 (program_unit_list -> program_unit .)
+    LOGICAL         reduce using rule 3 (program_unit_list -> program_unit .)
+    CHARACTER       reduce using rule 3 (program_unit_list -> program_unit .)
+    $end            reduce using rule 3 (program_unit_list -> program_unit .)
+
+
+state 4
+
+    (4) program_unit -> PROGRAM . ID newlines declaration_list statement_list END newlines
+    (5) program_unit -> PROGRAM . ID newlines declaration_list statement_list END
+
+    ID              shift and go to state 12
+
+
+state 5
+
+    (6) program_unit -> type_spec . FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+
+    FUNCTION        shift and go to state 13
+
+
+state 6
+
+    (7) program_unit -> SUBROUTINE . ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+
+    ID              shift and go to state 14
+
+
+state 7
+
+    (14) type_spec -> INTEGER .
+
+    FUNCTION        reduce using rule 14 (type_spec -> INTEGER .)
+    ID              reduce using rule 14 (type_spec -> INTEGER .)
+
+
+state 8
+
+    (15) type_spec -> REAL .
+
+    FUNCTION        reduce using rule 15 (type_spec -> REAL .)
+    ID              reduce using rule 15 (type_spec -> REAL .)
+
+
+state 9
+
+    (16) type_spec -> LOGICAL .
+
+    FUNCTION        reduce using rule 16 (type_spec -> LOGICAL .)
+    ID              reduce using rule 16 (type_spec -> LOGICAL .)
+
+
+state 10
+
+    (17) type_spec -> CHARACTER .
+
+    FUNCTION        reduce using rule 17 (type_spec -> CHARACTER .)
+    ID              reduce using rule 17 (type_spec -> CHARACTER .)
+
+
+state 11
+
+    (2) program_unit_list -> program_unit_list program_unit .
+
+    PROGRAM         reduce using rule 2 (program_unit_list -> program_unit_list program_unit .)
+    SUBROUTINE      reduce using rule 2 (program_unit_list -> program_unit_list program_unit .)
+    INTEGER         reduce using rule 2 (program_unit_list -> program_unit_list program_unit .)
+    REAL            reduce using rule 2 (program_unit_list -> program_unit_list program_unit .)
+    LOGICAL         reduce using rule 2 (program_unit_list -> program_unit_list program_unit .)
+    CHARACTER       reduce using rule 2 (program_unit_list -> program_unit_list program_unit .)
+    $end            reduce using rule 2 (program_unit_list -> program_unit_list program_unit .)
+
+
+state 12
+
+    (4) program_unit -> PROGRAM ID . newlines declaration_list statement_list END newlines
+    (5) program_unit -> PROGRAM ID . newlines declaration_list statement_list END
+    (8) newlines -> . NL
+    (9) newlines -> . newlines NL
+
+    NL              shift and go to state 16
+
+    newlines                       shift and go to state 15
+
+state 13
+
+    (6) program_unit -> type_spec FUNCTION . ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+
+    ID              shift and go to state 17
+
+
+state 14
+
+    (7) program_unit -> SUBROUTINE ID . LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+
+    LPAREN          shift and go to state 18
+
+
+state 15
+
+    (4) program_unit -> PROGRAM ID newlines . declaration_list statement_list END newlines
+    (5) program_unit -> PROGRAM ID newlines . declaration_list statement_list END
+    (9) newlines -> newlines . NL
+    (10) declaration_list -> . declaration_list declaration
+    (11) declaration_list -> .
+
+    NL              shift and go to state 20
+    INTEGER         reduce using rule 11 (declaration_list -> .)
+    REAL            reduce using rule 11 (declaration_list -> .)
+    LOGICAL         reduce using rule 11 (declaration_list -> .)
+    CHARACTER       reduce using rule 11 (declaration_list -> .)
+    END             reduce using rule 11 (declaration_list -> .)
+    INT_LITERAL     reduce using rule 11 (declaration_list -> .)
+    ID              reduce using rule 11 (declaration_list -> .)
+    PRINT           reduce using rule 11 (declaration_list -> .)
+    READ            reduce using rule 11 (declaration_list -> .)
+    IF              reduce using rule 11 (declaration_list -> .)
+    DO              reduce using rule 11 (declaration_list -> .)
+    GOTO            reduce using rule 11 (declaration_list -> .)
+    CONTINUE        reduce using rule 11 (declaration_list -> .)
+
+    declaration_list               shift and go to state 19
+
+state 16
+
+    (8) newlines -> NL .
+
+    NL              reduce using rule 8 (newlines -> NL .)
+    INTEGER         reduce using rule 8 (newlines -> NL .)
+    REAL            reduce using rule 8 (newlines -> NL .)
+    LOGICAL         reduce using rule 8 (newlines -> NL .)
+    CHARACTER       reduce using rule 8 (newlines -> NL .)
+    END             reduce using rule 8 (newlines -> NL .)
+    INT_LITERAL     reduce using rule 8 (newlines -> NL .)
+    ID              reduce using rule 8 (newlines -> NL .)
+    PRINT           reduce using rule 8 (newlines -> NL .)
+    READ            reduce using rule 8 (newlines -> NL .)
+    IF              reduce using rule 8 (newlines -> NL .)
+    DO              reduce using rule 8 (newlines -> NL .)
+    GOTO            reduce using rule 8 (newlines -> NL .)
+    CONTINUE        reduce using rule 8 (newlines -> NL .)
+    PROGRAM         reduce using rule 8 (newlines -> NL .)
+    SUBROUTINE      reduce using rule 8 (newlines -> NL .)
+    $end            reduce using rule 8 (newlines -> NL .)
+
+
+state 17
+
+    (6) program_unit -> type_spec FUNCTION ID . LPAREN param_list RPAREN newlines declaration_list statement_list END newlines
+
+    LPAREN          shift and go to state 21
+
+
+state 18
+
+    (7) program_unit -> SUBROUTINE ID LPAREN . param_list RPAREN newlines declaration_list statement_list END newlines
+    (24) param_list -> . param_list COMMA ID
+    (25) param_list -> . ID
+    (26) param_list -> .
+
+    ID              shift and go to state 22
+    RPAREN          reduce using rule 26 (param_list -> .)
+    COMMA           reduce using rule 26 (param_list -> .)
+
+    param_list                     shift and go to state 23
+
+state 19
+
+    (4) program_unit -> PROGRAM ID newlines declaration_list . statement_list END newlines
+    (5) program_unit -> PROGRAM ID newlines declaration_list . statement_list END
+    (10) declaration_list -> declaration_list . declaration
+    (27) statement_list -> . statement_list statement
+    (28) statement_list -> .
+    (12) declaration -> . type_spec var_decl_list NL
+    (13) declaration -> . type_spec var_decl_list LABEL_NL
+    (14) type_spec -> . INTEGER
+    (15) type_spec -> . REAL
+    (16) type_spec -> . LOGICAL
+    (17) type_spec -> . CHARACTER
+
+    END             reduce using rule 28 (statement_list -> .)
+    INT_LITERAL     reduce using rule 28 (statement_list -> .)
+    ID              reduce using rule 28 (statement_list -> .)
+    PRINT           reduce using rule 28 (statement_list -> .)
+    READ            reduce using rule 28 (statement_list -> .)
+    IF              reduce using rule 28 (statement_list -> .)
+    DO              reduce using rule 28 (statement_list -> .)
+    GOTO            reduce using rule 28 (statement_list -> .)
+    CONTINUE        reduce using rule 28 (statement_list -> .)
+    INTEGER         shift and go to state 7
+    REAL            shift and go to state 8
+    LOGICAL         shift and go to state 9
+    CHARACTER       shift and go to state 10
+
+    statement_list                 shift and go to state 24
+    declaration                    shift and go to state 25
+    type_spec                      shift and go to state 26
+
+state 20
+
+    (9) newlines -> newlines NL .
+
+    NL              reduce using rule 9 (newlines -> newlines NL .)
+    INTEGER         reduce using rule 9 (newlines -> newlines NL .)
+    REAL            reduce using rule 9 (newlines -> newlines NL .)
+    LOGICAL         reduce using rule 9 (newlines -> newlines NL .)
+    CHARACTER       reduce using rule 9 (newlines -> newlines NL .)
+    END             reduce using rule 9 (newlines -> newlines NL .)
+    INT_LITERAL     reduce using rule 9 (newlines -> newlines NL .)
+    ID              reduce using rule 9 (newlines -> newlines NL .)
+    PRINT           reduce using rule 9 (newlines -> newlines NL .)
+    READ            reduce using rule 9 (newlines -> newlines NL .)
+    IF              reduce using rule 9 (newlines -> newlines NL .)
+    DO              reduce using rule 9 (newlines -> newlines NL .)
+    GOTO            reduce using rule 9 (newlines -> newlines NL .)
+    CONTINUE        reduce using rule 9 (newlines -> newlines NL .)
+    PROGRAM         reduce using rule 9 (newlines -> newlines NL .)
+    SUBROUTINE      reduce using rule 9 (newlines -> newlines NL .)
+    $end            reduce using rule 9 (newlines -> newlines NL .)
+
+
+state 21
+
+    (6) program_unit -> type_spec FUNCTION ID LPAREN . param_list RPAREN newlines declaration_list statement_list END newlines
+    (24) param_list -> . param_list COMMA ID
+    (25) param_list -> . ID
+    (26) param_list -> .
+
+    ID              shift and go to state 22
+    RPAREN          reduce using rule 26 (param_list -> .)
+    COMMA           reduce using rule 26 (param_list -> .)
+
+    param_list                     shift and go to state 27
+
+state 22
+
+    (25) param_list -> ID .
+
+    RPAREN          reduce using rule 25 (param_list -> ID .)
+    COMMA           reduce using rule 25 (param_list -> ID .)
+
+
+state 23
+
+    (7) program_unit -> SUBROUTINE ID LPAREN param_list . RPAREN newlines declaration_list statement_list END newlines
+    (24) param_list -> param_list . COMMA ID
+
+    RPAREN          shift and go to state 28
+    COMMA           shift and go to state 29
+
+
+state 24
+
+    (4) program_unit -> PROGRAM ID newlines declaration_list statement_list . END newlines
+    (5) program_unit -> PROGRAM ID newlines declaration_list statement_list . END
+    (27) statement_list -> statement_list . statement
+    (31) statement -> . opt_label ID EQUALS expr stmt_end
+    (32) statement -> . opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end
+    (33) statement -> . opt_label PRINT STAR COMMA print_list stmt_end
+    (34) statement -> . opt_label PRINT STAR stmt_end
+    (37) statement -> . opt_label READ STAR COMMA read_list stmt_end
+    (40) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+    (42) statement -> . opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (43) statement -> . opt_label GOTO INT_LITERAL stmt_end
+    (44) statement -> . opt_label CONTINUE stmt_end
+    (45) opt_label -> . INT_LITERAL
+    (46) opt_label -> .
+
+    END             shift and go to state 30
+    INT_LITERAL     shift and go to state 33
+    ID              reduce using rule 46 (opt_label -> .)
+    PRINT           reduce using rule 46 (opt_label -> .)
+    READ            reduce using rule 46 (opt_label -> .)
+    IF              reduce using rule 46 (opt_label -> .)
+    DO              reduce using rule 46 (opt_label -> .)
+    GOTO            reduce using rule 46 (opt_label -> .)
+    CONTINUE        reduce using rule 46 (opt_label -> .)
+
+    statement                      shift and go to state 31
+    opt_label                      shift and go to state 32
+
+state 25
+
+    (10) declaration_list -> declaration_list declaration .
+
+    INTEGER         reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    REAL            reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    LOGICAL         reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    CHARACTER       reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    END             reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    INT_LITERAL     reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    ID              reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    PRINT           reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    READ            reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    IF              reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    DO              reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    GOTO            reduce using rule 10 (declaration_list -> declaration_list declaration .)
+    CONTINUE        reduce using rule 10 (declaration_list -> declaration_list declaration .)
+
+
+state 26
+
+    (12) declaration -> type_spec . var_decl_list NL
+    (13) declaration -> type_spec . var_decl_list LABEL_NL
+    (18) var_decl_list -> . var_decl_list COMMA var_decl
+    (19) var_decl_list -> . var_decl
+    (20) var_decl -> . ID
+    (21) var_decl -> . ID LPAREN dim_list RPAREN
+
+    ID              shift and go to state 36
+
+    var_decl_list                  shift and go to state 34
+    var_decl                       shift and go to state 35
+
+state 27
+
+    (6) program_unit -> type_spec FUNCTION ID LPAREN param_list . RPAREN newlines declaration_list statement_list END newlines
+    (24) param_list -> param_list . COMMA ID
+
+    RPAREN          shift and go to state 37
+    COMMA           shift and go to state 29
+
+
+state 28
+
+    (7) program_unit -> SUBROUTINE ID LPAREN param_list RPAREN . newlines declaration_list statement_list END newlines
+    (8) newlines -> . NL
+    (9) newlines -> . newlines NL
+
+    NL              shift and go to state 16
+
+    newlines                       shift and go to state 38
+
+state 29
+
+    (24) param_list -> param_list COMMA . ID
+
+    ID              shift and go to state 39
+
+
+state 30
+
+    (4) program_unit -> PROGRAM ID newlines declaration_list statement_list END . newlines
+    (5) program_unit -> PROGRAM ID newlines declaration_list statement_list END .
+    (8) newlines -> . NL
+    (9) newlines -> . newlines NL
+
+    PROGRAM         reduce using rule 5 (program_unit -> PROGRAM ID newlines declaration_list statement_list END .)
+    SUBROUTINE      reduce using rule 5 (program_unit -> PROGRAM ID newlines declaration_list statement_list END .)
+    INTEGER         reduce using rule 5 (program_unit -> PROGRAM ID newlines declaration_list statement_list END .)
+    REAL            reduce using rule 5 (program_unit -> PROGRAM ID newlines declaration_list statement_list END .)
+    LOGICAL         reduce using rule 5 (program_unit -> PROGRAM ID newlines declaration_list statement_list END .)
+    CHARACTER       reduce using rule 5 (program_unit -> PROGRAM ID newlines declaration_list statement_list END .)
+    $end            reduce using rule 5 (program_unit -> PROGRAM ID newlines declaration_list statement_list END .)
+    NL              shift and go to state 16
+
+    newlines                       shift and go to state 40
+
+state 31
+
+    (27) statement_list -> statement_list statement .
+
+    END             reduce using rule 27 (statement_list -> statement_list statement .)
+    INT_LITERAL     reduce using rule 27 (statement_list -> statement_list statement .)
+    ID              reduce using rule 27 (statement_list -> statement_list statement .)
+    PRINT           reduce using rule 27 (statement_list -> statement_list statement .)
+    READ            reduce using rule 27 (statement_list -> statement_list statement .)
+    IF              reduce using rule 27 (statement_list -> statement_list statement .)
+    DO              reduce using rule 27 (statement_list -> statement_list statement .)
+    GOTO            reduce using rule 27 (statement_list -> statement_list statement .)
+    CONTINUE        reduce using rule 27 (statement_list -> statement_list statement .)
+    ENDIF           reduce using rule 27 (statement_list -> statement_list statement .)
+    ELSE            reduce using rule 27 (statement_list -> statement_list statement .)
+
+
+state 32
+
+    (31) statement -> opt_label . ID EQUALS expr stmt_end
+    (32) statement -> opt_label . ID LPAREN index_list RPAREN EQUALS expr stmt_end
+    (33) statement -> opt_label . PRINT STAR COMMA print_list stmt_end
+    (34) statement -> opt_label . PRINT STAR stmt_end
+    (37) statement -> opt_label . READ STAR COMMA read_list stmt_end
+    (40) statement -> opt_label . IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> opt_label . IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+    (42) statement -> opt_label . DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (43) statement -> opt_label . GOTO INT_LITERAL stmt_end
+    (44) statement -> opt_label . CONTINUE stmt_end
+
+    ID              shift and go to state 41
+    PRINT           shift and go to state 42
+    READ            shift and go to state 43
+    IF              shift and go to state 44
+    DO              shift and go to state 45
+    GOTO            shift and go to state 47
+    CONTINUE        shift and go to state 46
+
+
+state 33
+
+    (45) opt_label -> INT_LITERAL .
+
+    ID              reduce using rule 45 (opt_label -> INT_LITERAL .)
+    PRINT           reduce using rule 45 (opt_label -> INT_LITERAL .)
+    READ            reduce using rule 45 (opt_label -> INT_LITERAL .)
+    IF              reduce using rule 45 (opt_label -> INT_LITERAL .)
+    DO              reduce using rule 45 (opt_label -> INT_LITERAL .)
+    GOTO            reduce using rule 45 (opt_label -> INT_LITERAL .)
+    CONTINUE        reduce using rule 45 (opt_label -> INT_LITERAL .)
+
+
+state 34
+
+    (12) declaration -> type_spec var_decl_list . NL
+    (13) declaration -> type_spec var_decl_list . LABEL_NL
+    (18) var_decl_list -> var_decl_list . COMMA var_decl
+
+    NL              shift and go to state 48
+    LABEL_NL        shift and go to state 49
+    COMMA           shift and go to state 50
+
+
+state 35
+
+    (19) var_decl_list -> var_decl .
+
+    NL              reduce using rule 19 (var_decl_list -> var_decl .)
+    LABEL_NL        reduce using rule 19 (var_decl_list -> var_decl .)
+    COMMA           reduce using rule 19 (var_decl_list -> var_decl .)
+
+
+state 36
+
+    (20) var_decl -> ID .
+    (21) var_decl -> ID . LPAREN dim_list RPAREN
+
+    NL              reduce using rule 20 (var_decl -> ID .)
+    LABEL_NL        reduce using rule 20 (var_decl -> ID .)
+    COMMA           reduce using rule 20 (var_decl -> ID .)
+    LPAREN          shift and go to state 51
+
+
+state 37
+
+    (6) program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN . newlines declaration_list statement_list END newlines
+    (8) newlines -> . NL
+    (9) newlines -> . newlines NL
+
+    NL              shift and go to state 16
+
+    newlines                       shift and go to state 52
+
+state 38
+
+    (7) program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines . declaration_list statement_list END newlines
+    (9) newlines -> newlines . NL
+    (10) declaration_list -> . declaration_list declaration
+    (11) declaration_list -> .
+
+    NL              shift and go to state 20
+    INTEGER         reduce using rule 11 (declaration_list -> .)
+    REAL            reduce using rule 11 (declaration_list -> .)
+    LOGICAL         reduce using rule 11 (declaration_list -> .)
+    CHARACTER       reduce using rule 11 (declaration_list -> .)
+    END             reduce using rule 11 (declaration_list -> .)
+    INT_LITERAL     reduce using rule 11 (declaration_list -> .)
+    ID              reduce using rule 11 (declaration_list -> .)
+    PRINT           reduce using rule 11 (declaration_list -> .)
+    READ            reduce using rule 11 (declaration_list -> .)
+    IF              reduce using rule 11 (declaration_list -> .)
+    DO              reduce using rule 11 (declaration_list -> .)
+    GOTO            reduce using rule 11 (declaration_list -> .)
+    CONTINUE        reduce using rule 11 (declaration_list -> .)
+
+    declaration_list               shift and go to state 53
+
+state 39
+
+    (24) param_list -> param_list COMMA ID .
+
+    RPAREN          reduce using rule 24 (param_list -> param_list COMMA ID .)
+    COMMA           reduce using rule 24 (param_list -> param_list COMMA ID .)
+
+
+state 40
+
+    (4) program_unit -> PROGRAM ID newlines declaration_list statement_list END newlines .
+    (9) newlines -> newlines . NL
+
+    PROGRAM         reduce using rule 4 (program_unit -> PROGRAM ID newlines declaration_list statement_list END newlines .)
+    SUBROUTINE      reduce using rule 4 (program_unit -> PROGRAM ID newlines declaration_list statement_list END newlines .)
+    INTEGER         reduce using rule 4 (program_unit -> PROGRAM ID newlines declaration_list statement_list END newlines .)
+    REAL            reduce using rule 4 (program_unit -> PROGRAM ID newlines declaration_list statement_list END newlines .)
+    LOGICAL         reduce using rule 4 (program_unit -> PROGRAM ID newlines declaration_list statement_list END newlines .)
+    CHARACTER       reduce using rule 4 (program_unit -> PROGRAM ID newlines declaration_list statement_list END newlines .)
+    $end            reduce using rule 4 (program_unit -> PROGRAM ID newlines declaration_list statement_list END newlines .)
+    NL              shift and go to state 20
+
+
+state 41
+
+    (31) statement -> opt_label ID . EQUALS expr stmt_end
+    (32) statement -> opt_label ID . LPAREN index_list RPAREN EQUALS expr stmt_end
+
+    EQUALS          shift and go to state 54
+    LPAREN          shift and go to state 55
+
+
+state 42
+
+    (33) statement -> opt_label PRINT . STAR COMMA print_list stmt_end
+    (34) statement -> opt_label PRINT . STAR stmt_end
+
+    STAR            shift and go to state 56
+
+
+state 43
+
+    (37) statement -> opt_label READ . STAR COMMA read_list stmt_end
+
+    STAR            shift and go to state 57
+
+
+state 44
+
+    (40) statement -> opt_label IF . LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> opt_label IF . LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+
+    LPAREN          shift and go to state 58
+
+
+state 45
+
+    (42) statement -> opt_label DO . INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+
+    INT_LITERAL     shift and go to state 59
+
+
+state 46
+
+    (44) statement -> opt_label CONTINUE . stmt_end
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 60
+
+state 47
+
+    (43) statement -> opt_label GOTO . INT_LITERAL stmt_end
+
+    INT_LITERAL     shift and go to state 63
+
+
+state 48
+
+    (12) declaration -> type_spec var_decl_list NL .
+
+    INTEGER         reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    REAL            reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    LOGICAL         reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    CHARACTER       reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    END             reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    INT_LITERAL     reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    ID              reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    PRINT           reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    READ            reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    IF              reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    DO              reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    GOTO            reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+    CONTINUE        reduce using rule 12 (declaration -> type_spec var_decl_list NL .)
+
+
+state 49
+
+    (13) declaration -> type_spec var_decl_list LABEL_NL .
+
+    INTEGER         reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    REAL            reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    LOGICAL         reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    CHARACTER       reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    END             reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    INT_LITERAL     reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    ID              reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    PRINT           reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    READ            reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    IF              reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    DO              reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    GOTO            reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+    CONTINUE        reduce using rule 13 (declaration -> type_spec var_decl_list LABEL_NL .)
+
+
+state 50
+
+    (18) var_decl_list -> var_decl_list COMMA . var_decl
+    (20) var_decl -> . ID
+    (21) var_decl -> . ID LPAREN dim_list RPAREN
+
+    ID              shift and go to state 36
+
+    var_decl                       shift and go to state 64
+
+state 51
+
+    (21) var_decl -> ID LPAREN . dim_list RPAREN
+    (22) dim_list -> . dim_list COMMA INT_LITERAL
+    (23) dim_list -> . INT_LITERAL
+
+    INT_LITERAL     shift and go to state 66
+
+    dim_list                       shift and go to state 65
+
+state 52
+
+    (6) program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines . declaration_list statement_list END newlines
+    (9) newlines -> newlines . NL
+    (10) declaration_list -> . declaration_list declaration
+    (11) declaration_list -> .
+
+    NL              shift and go to state 20
+    INTEGER         reduce using rule 11 (declaration_list -> .)
+    REAL            reduce using rule 11 (declaration_list -> .)
+    LOGICAL         reduce using rule 11 (declaration_list -> .)
+    CHARACTER       reduce using rule 11 (declaration_list -> .)
+    END             reduce using rule 11 (declaration_list -> .)
+    INT_LITERAL     reduce using rule 11 (declaration_list -> .)
+    ID              reduce using rule 11 (declaration_list -> .)
+    PRINT           reduce using rule 11 (declaration_list -> .)
+    READ            reduce using rule 11 (declaration_list -> .)
+    IF              reduce using rule 11 (declaration_list -> .)
+    DO              reduce using rule 11 (declaration_list -> .)
+    GOTO            reduce using rule 11 (declaration_list -> .)
+    CONTINUE        reduce using rule 11 (declaration_list -> .)
+
+    declaration_list               shift and go to state 67
+
+state 53
+
+    (7) program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list . statement_list END newlines
+    (10) declaration_list -> declaration_list . declaration
+    (27) statement_list -> . statement_list statement
+    (28) statement_list -> .
+    (12) declaration -> . type_spec var_decl_list NL
+    (13) declaration -> . type_spec var_decl_list LABEL_NL
+    (14) type_spec -> . INTEGER
+    (15) type_spec -> . REAL
+    (16) type_spec -> . LOGICAL
+    (17) type_spec -> . CHARACTER
+
+    END             reduce using rule 28 (statement_list -> .)
+    INT_LITERAL     reduce using rule 28 (statement_list -> .)
+    ID              reduce using rule 28 (statement_list -> .)
+    PRINT           reduce using rule 28 (statement_list -> .)
+    READ            reduce using rule 28 (statement_list -> .)
+    IF              reduce using rule 28 (statement_list -> .)
+    DO              reduce using rule 28 (statement_list -> .)
+    GOTO            reduce using rule 28 (statement_list -> .)
+    CONTINUE        reduce using rule 28 (statement_list -> .)
+    INTEGER         shift and go to state 7
+    REAL            shift and go to state 8
+    LOGICAL         shift and go to state 9
+    CHARACTER       shift and go to state 10
+
+    statement_list                 shift and go to state 68
+    declaration                    shift and go to state 25
+    type_spec                      shift and go to state 26
+
+state 54
+
+    (31) statement -> opt_label ID EQUALS . expr stmt_end
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 70
+    var_ref                        shift and go to state 80
+
+state 55
+
+    (32) statement -> opt_label ID LPAREN . index_list RPAREN EQUALS expr stmt_end
+    (72) index_list -> . index_list COMMA expr
+    (73) index_list -> . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    index_list                     shift and go to state 81
+    expr                           shift and go to state 82
+    var_ref                        shift and go to state 80
+
+state 56
+
+    (33) statement -> opt_label PRINT STAR . COMMA print_list stmt_end
+    (34) statement -> opt_label PRINT STAR . stmt_end
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    COMMA           shift and go to state 83
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 84
+
+state 57
+
+    (37) statement -> opt_label READ STAR . COMMA read_list stmt_end
+
+    COMMA           shift and go to state 85
+
+
+state 58
+
+    (40) statement -> opt_label IF LPAREN . expr RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> opt_label IF LPAREN . expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 86
+    var_ref                        shift and go to state 80
+
+state 59
+
+    (42) statement -> opt_label DO INT_LITERAL . ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+
+    ID              shift and go to state 87
+
+
+state 60
+
+    (44) statement -> opt_label CONTINUE stmt_end .
+
+    END             reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    INT_LITERAL     reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    ID              reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    PRINT           reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    READ            reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    IF              reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    DO              reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    GOTO            reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    CONTINUE        reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    ENDIF           reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+    ELSE            reduce using rule 44 (statement -> opt_label CONTINUE stmt_end .)
+
+
+state 61
+
+    (29) stmt_end -> NL .
+
+    END             reduce using rule 29 (stmt_end -> NL .)
+    INT_LITERAL     reduce using rule 29 (stmt_end -> NL .)
+    ID              reduce using rule 29 (stmt_end -> NL .)
+    PRINT           reduce using rule 29 (stmt_end -> NL .)
+    READ            reduce using rule 29 (stmt_end -> NL .)
+    IF              reduce using rule 29 (stmt_end -> NL .)
+    DO              reduce using rule 29 (stmt_end -> NL .)
+    GOTO            reduce using rule 29 (stmt_end -> NL .)
+    CONTINUE        reduce using rule 29 (stmt_end -> NL .)
+    ENDIF           reduce using rule 29 (stmt_end -> NL .)
+    ELSE            reduce using rule 29 (stmt_end -> NL .)
+
+
+state 62
+
+    (30) stmt_end -> LABEL_NL .
+
+    END             reduce using rule 30 (stmt_end -> LABEL_NL .)
+    INT_LITERAL     reduce using rule 30 (stmt_end -> LABEL_NL .)
+    ID              reduce using rule 30 (stmt_end -> LABEL_NL .)
+    PRINT           reduce using rule 30 (stmt_end -> LABEL_NL .)
+    READ            reduce using rule 30 (stmt_end -> LABEL_NL .)
+    IF              reduce using rule 30 (stmt_end -> LABEL_NL .)
+    DO              reduce using rule 30 (stmt_end -> LABEL_NL .)
+    GOTO            reduce using rule 30 (stmt_end -> LABEL_NL .)
+    CONTINUE        reduce using rule 30 (stmt_end -> LABEL_NL .)
+    ENDIF           reduce using rule 30 (stmt_end -> LABEL_NL .)
+    ELSE            reduce using rule 30 (stmt_end -> LABEL_NL .)
+
+
+state 63
+
+    (43) statement -> opt_label GOTO INT_LITERAL . stmt_end
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 88
+
+state 64
+
+    (18) var_decl_list -> var_decl_list COMMA var_decl .
+
+    NL              reduce using rule 18 (var_decl_list -> var_decl_list COMMA var_decl .)
+    LABEL_NL        reduce using rule 18 (var_decl_list -> var_decl_list COMMA var_decl .)
+    COMMA           reduce using rule 18 (var_decl_list -> var_decl_list COMMA var_decl .)
+
+
+state 65
+
+    (21) var_decl -> ID LPAREN dim_list . RPAREN
+    (22) dim_list -> dim_list . COMMA INT_LITERAL
+
+    RPAREN          shift and go to state 89
+    COMMA           shift and go to state 90
+
+
+state 66
+
+    (23) dim_list -> INT_LITERAL .
+
+    RPAREN          reduce using rule 23 (dim_list -> INT_LITERAL .)
+    COMMA           reduce using rule 23 (dim_list -> INT_LITERAL .)
+
+
+state 67
+
+    (6) program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list . statement_list END newlines
+    (10) declaration_list -> declaration_list . declaration
+    (27) statement_list -> . statement_list statement
+    (28) statement_list -> .
+    (12) declaration -> . type_spec var_decl_list NL
+    (13) declaration -> . type_spec var_decl_list LABEL_NL
+    (14) type_spec -> . INTEGER
+    (15) type_spec -> . REAL
+    (16) type_spec -> . LOGICAL
+    (17) type_spec -> . CHARACTER
+
+    END             reduce using rule 28 (statement_list -> .)
+    INT_LITERAL     reduce using rule 28 (statement_list -> .)
+    ID              reduce using rule 28 (statement_list -> .)
+    PRINT           reduce using rule 28 (statement_list -> .)
+    READ            reduce using rule 28 (statement_list -> .)
+    IF              reduce using rule 28 (statement_list -> .)
+    DO              reduce using rule 28 (statement_list -> .)
+    GOTO            reduce using rule 28 (statement_list -> .)
+    CONTINUE        reduce using rule 28 (statement_list -> .)
+    INTEGER         shift and go to state 7
+    REAL            shift and go to state 8
+    LOGICAL         shift and go to state 9
+    CHARACTER       shift and go to state 10
+
+    type_spec                      shift and go to state 26
+    statement_list                 shift and go to state 91
+    declaration                    shift and go to state 25
+
+state 68
+
+    (7) program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list . END newlines
+    (27) statement_list -> statement_list . statement
+    (31) statement -> . opt_label ID EQUALS expr stmt_end
+    (32) statement -> . opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end
+    (33) statement -> . opt_label PRINT STAR COMMA print_list stmt_end
+    (34) statement -> . opt_label PRINT STAR stmt_end
+    (37) statement -> . opt_label READ STAR COMMA read_list stmt_end
+    (40) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+    (42) statement -> . opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (43) statement -> . opt_label GOTO INT_LITERAL stmt_end
+    (44) statement -> . opt_label CONTINUE stmt_end
+    (45) opt_label -> . INT_LITERAL
+    (46) opt_label -> .
+
+    END             shift and go to state 92
+    INT_LITERAL     shift and go to state 33
+    ID              reduce using rule 46 (opt_label -> .)
+    PRINT           reduce using rule 46 (opt_label -> .)
+    READ            reduce using rule 46 (opt_label -> .)
+    IF              reduce using rule 46 (opt_label -> .)
+    DO              reduce using rule 46 (opt_label -> .)
+    GOTO            reduce using rule 46 (opt_label -> .)
+    CONTINUE        reduce using rule 46 (opt_label -> .)
+
+    statement                      shift and go to state 31
+    opt_label                      shift and go to state 32
+
+state 69
+
+    (70) var_ref -> ID .
+    (71) var_ref -> ID . LPAREN index_list RPAREN
+
+    PLUS            reduce using rule 70 (var_ref -> ID .)
+    MINUS           reduce using rule 70 (var_ref -> ID .)
+    STAR            reduce using rule 70 (var_ref -> ID .)
+    SLASH           reduce using rule 70 (var_ref -> ID .)
+    POWER           reduce using rule 70 (var_ref -> ID .)
+    EQ              reduce using rule 70 (var_ref -> ID .)
+    NE              reduce using rule 70 (var_ref -> ID .)
+    LT              reduce using rule 70 (var_ref -> ID .)
+    LE              reduce using rule 70 (var_ref -> ID .)
+    GT              reduce using rule 70 (var_ref -> ID .)
+    GE              reduce using rule 70 (var_ref -> ID .)
+    AND             reduce using rule 70 (var_ref -> ID .)
+    OR              reduce using rule 70 (var_ref -> ID .)
+    NL              reduce using rule 70 (var_ref -> ID .)
+    LABEL_NL        reduce using rule 70 (var_ref -> ID .)
+    RPAREN          reduce using rule 70 (var_ref -> ID .)
+    COMMA           reduce using rule 70 (var_ref -> ID .)
+    LPAREN          shift and go to state 93
+
+
+state 70
+
+    (31) statement -> opt_label ID EQUALS expr . stmt_end
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 94
+
+state 71
+
+    (61) expr -> PLUS . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 108
+    var_ref                        shift and go to state 80
+
+state 72
+
+    (60) expr -> MINUS . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 109
+    var_ref                        shift and go to state 80
+
+state 73
+
+    (62) expr -> NOT . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 110
+    var_ref                        shift and go to state 80
+
+state 74
+
+    (63) expr -> LPAREN . expr RPAREN
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 111
+    var_ref                        shift and go to state 80
+
+state 75
+
+    (64) expr -> INT_LITERAL .
+
+    PLUS            reduce using rule 64 (expr -> INT_LITERAL .)
+    MINUS           reduce using rule 64 (expr -> INT_LITERAL .)
+    STAR            reduce using rule 64 (expr -> INT_LITERAL .)
+    SLASH           reduce using rule 64 (expr -> INT_LITERAL .)
+    POWER           reduce using rule 64 (expr -> INT_LITERAL .)
+    EQ              reduce using rule 64 (expr -> INT_LITERAL .)
+    NE              reduce using rule 64 (expr -> INT_LITERAL .)
+    LT              reduce using rule 64 (expr -> INT_LITERAL .)
+    LE              reduce using rule 64 (expr -> INT_LITERAL .)
+    GT              reduce using rule 64 (expr -> INT_LITERAL .)
+    GE              reduce using rule 64 (expr -> INT_LITERAL .)
+    AND             reduce using rule 64 (expr -> INT_LITERAL .)
+    OR              reduce using rule 64 (expr -> INT_LITERAL .)
+    NL              reduce using rule 64 (expr -> INT_LITERAL .)
+    LABEL_NL        reduce using rule 64 (expr -> INT_LITERAL .)
+    RPAREN          reduce using rule 64 (expr -> INT_LITERAL .)
+    COMMA           reduce using rule 64 (expr -> INT_LITERAL .)
+
+
+state 76
+
+    (65) expr -> REAL_LITERAL .
+
+    PLUS            reduce using rule 65 (expr -> REAL_LITERAL .)
+    MINUS           reduce using rule 65 (expr -> REAL_LITERAL .)
+    STAR            reduce using rule 65 (expr -> REAL_LITERAL .)
+    SLASH           reduce using rule 65 (expr -> REAL_LITERAL .)
+    POWER           reduce using rule 65 (expr -> REAL_LITERAL .)
+    EQ              reduce using rule 65 (expr -> REAL_LITERAL .)
+    NE              reduce using rule 65 (expr -> REAL_LITERAL .)
+    LT              reduce using rule 65 (expr -> REAL_LITERAL .)
+    LE              reduce using rule 65 (expr -> REAL_LITERAL .)
+    GT              reduce using rule 65 (expr -> REAL_LITERAL .)
+    GE              reduce using rule 65 (expr -> REAL_LITERAL .)
+    AND             reduce using rule 65 (expr -> REAL_LITERAL .)
+    OR              reduce using rule 65 (expr -> REAL_LITERAL .)
+    NL              reduce using rule 65 (expr -> REAL_LITERAL .)
+    LABEL_NL        reduce using rule 65 (expr -> REAL_LITERAL .)
+    RPAREN          reduce using rule 65 (expr -> REAL_LITERAL .)
+    COMMA           reduce using rule 65 (expr -> REAL_LITERAL .)
+
+
+state 77
+
+    (66) expr -> TRUE .
+
+    PLUS            reduce using rule 66 (expr -> TRUE .)
+    MINUS           reduce using rule 66 (expr -> TRUE .)
+    STAR            reduce using rule 66 (expr -> TRUE .)
+    SLASH           reduce using rule 66 (expr -> TRUE .)
+    POWER           reduce using rule 66 (expr -> TRUE .)
+    EQ              reduce using rule 66 (expr -> TRUE .)
+    NE              reduce using rule 66 (expr -> TRUE .)
+    LT              reduce using rule 66 (expr -> TRUE .)
+    LE              reduce using rule 66 (expr -> TRUE .)
+    GT              reduce using rule 66 (expr -> TRUE .)
+    GE              reduce using rule 66 (expr -> TRUE .)
+    AND             reduce using rule 66 (expr -> TRUE .)
+    OR              reduce using rule 66 (expr -> TRUE .)
+    NL              reduce using rule 66 (expr -> TRUE .)
+    LABEL_NL        reduce using rule 66 (expr -> TRUE .)
+    RPAREN          reduce using rule 66 (expr -> TRUE .)
+    COMMA           reduce using rule 66 (expr -> TRUE .)
+
+
+state 78
+
+    (67) expr -> FALSE .
+
+    PLUS            reduce using rule 67 (expr -> FALSE .)
+    MINUS           reduce using rule 67 (expr -> FALSE .)
+    STAR            reduce using rule 67 (expr -> FALSE .)
+    SLASH           reduce using rule 67 (expr -> FALSE .)
+    POWER           reduce using rule 67 (expr -> FALSE .)
+    EQ              reduce using rule 67 (expr -> FALSE .)
+    NE              reduce using rule 67 (expr -> FALSE .)
+    LT              reduce using rule 67 (expr -> FALSE .)
+    LE              reduce using rule 67 (expr -> FALSE .)
+    GT              reduce using rule 67 (expr -> FALSE .)
+    GE              reduce using rule 67 (expr -> FALSE .)
+    AND             reduce using rule 67 (expr -> FALSE .)
+    OR              reduce using rule 67 (expr -> FALSE .)
+    NL              reduce using rule 67 (expr -> FALSE .)
+    LABEL_NL        reduce using rule 67 (expr -> FALSE .)
+    RPAREN          reduce using rule 67 (expr -> FALSE .)
+    COMMA           reduce using rule 67 (expr -> FALSE .)
+
+
+state 79
+
+    (68) expr -> STRING_LITERAL .
+
+    PLUS            reduce using rule 68 (expr -> STRING_LITERAL .)
+    MINUS           reduce using rule 68 (expr -> STRING_LITERAL .)
+    STAR            reduce using rule 68 (expr -> STRING_LITERAL .)
+    SLASH           reduce using rule 68 (expr -> STRING_LITERAL .)
+    POWER           reduce using rule 68 (expr -> STRING_LITERAL .)
+    EQ              reduce using rule 68 (expr -> STRING_LITERAL .)
+    NE              reduce using rule 68 (expr -> STRING_LITERAL .)
+    LT              reduce using rule 68 (expr -> STRING_LITERAL .)
+    LE              reduce using rule 68 (expr -> STRING_LITERAL .)
+    GT              reduce using rule 68 (expr -> STRING_LITERAL .)
+    GE              reduce using rule 68 (expr -> STRING_LITERAL .)
+    AND             reduce using rule 68 (expr -> STRING_LITERAL .)
+    OR              reduce using rule 68 (expr -> STRING_LITERAL .)
+    NL              reduce using rule 68 (expr -> STRING_LITERAL .)
+    LABEL_NL        reduce using rule 68 (expr -> STRING_LITERAL .)
+    RPAREN          reduce using rule 68 (expr -> STRING_LITERAL .)
+    COMMA           reduce using rule 68 (expr -> STRING_LITERAL .)
+
+
+state 80
+
+    (69) expr -> var_ref .
+
+    PLUS            reduce using rule 69 (expr -> var_ref .)
+    MINUS           reduce using rule 69 (expr -> var_ref .)
+    STAR            reduce using rule 69 (expr -> var_ref .)
+    SLASH           reduce using rule 69 (expr -> var_ref .)
+    POWER           reduce using rule 69 (expr -> var_ref .)
+    EQ              reduce using rule 69 (expr -> var_ref .)
+    NE              reduce using rule 69 (expr -> var_ref .)
+    LT              reduce using rule 69 (expr -> var_ref .)
+    LE              reduce using rule 69 (expr -> var_ref .)
+    GT              reduce using rule 69 (expr -> var_ref .)
+    GE              reduce using rule 69 (expr -> var_ref .)
+    AND             reduce using rule 69 (expr -> var_ref .)
+    OR              reduce using rule 69 (expr -> var_ref .)
+    NL              reduce using rule 69 (expr -> var_ref .)
+    LABEL_NL        reduce using rule 69 (expr -> var_ref .)
+    RPAREN          reduce using rule 69 (expr -> var_ref .)
+    COMMA           reduce using rule 69 (expr -> var_ref .)
+
+
+state 81
+
+    (32) statement -> opt_label ID LPAREN index_list . RPAREN EQUALS expr stmt_end
+    (72) index_list -> index_list . COMMA expr
+
+    RPAREN          shift and go to state 112
+    COMMA           shift and go to state 113
+
+
+state 82
+
+    (73) index_list -> expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    RPAREN          reduce using rule 73 (index_list -> expr .)
+    COMMA           reduce using rule 73 (index_list -> expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+
+
+state 83
+
+    (33) statement -> opt_label PRINT STAR COMMA . print_list stmt_end
+    (35) print_list -> . print_list COMMA expr
+    (36) print_list -> . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    print_list                     shift and go to state 114
+    expr                           shift and go to state 115
+    var_ref                        shift and go to state 80
+
+state 84
+
+    (34) statement -> opt_label PRINT STAR stmt_end .
+
+    END             reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    INT_LITERAL     reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    ID              reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    PRINT           reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    READ            reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    IF              reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    DO              reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    GOTO            reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    CONTINUE        reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    ENDIF           reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+    ELSE            reduce using rule 34 (statement -> opt_label PRINT STAR stmt_end .)
+
+
+state 85
+
+    (37) statement -> opt_label READ STAR COMMA . read_list stmt_end
+    (38) read_list -> . read_list COMMA var_ref
+    (39) read_list -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    ID              shift and go to state 69
+
+    read_list                      shift and go to state 116
+    var_ref                        shift and go to state 117
+
+state 86
+
+    (40) statement -> opt_label IF LPAREN expr . RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> opt_label IF LPAREN expr . RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    RPAREN          shift and go to state 118
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+
+
+state 87
+
+    (42) statement -> opt_label DO INT_LITERAL ID . EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+
+    EQUALS          shift and go to state 119
+
+
+state 88
+
+    (43) statement -> opt_label GOTO INT_LITERAL stmt_end .
+
+    END             reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    INT_LITERAL     reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    ID              reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    PRINT           reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    READ            reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    IF              reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    DO              reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    GOTO            reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    CONTINUE        reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    ENDIF           reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+    ELSE            reduce using rule 43 (statement -> opt_label GOTO INT_LITERAL stmt_end .)
+
+
+state 89
+
+    (21) var_decl -> ID LPAREN dim_list RPAREN .
+
+    NL              reduce using rule 21 (var_decl -> ID LPAREN dim_list RPAREN .)
+    LABEL_NL        reduce using rule 21 (var_decl -> ID LPAREN dim_list RPAREN .)
+    COMMA           reduce using rule 21 (var_decl -> ID LPAREN dim_list RPAREN .)
+
+
+state 90
+
+    (22) dim_list -> dim_list COMMA . INT_LITERAL
+
+    INT_LITERAL     shift and go to state 120
+
+
+state 91
+
+    (6) program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list . END newlines
+    (27) statement_list -> statement_list . statement
+    (31) statement -> . opt_label ID EQUALS expr stmt_end
+    (32) statement -> . opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end
+    (33) statement -> . opt_label PRINT STAR COMMA print_list stmt_end
+    (34) statement -> . opt_label PRINT STAR stmt_end
+    (37) statement -> . opt_label READ STAR COMMA read_list stmt_end
+    (40) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+    (42) statement -> . opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (43) statement -> . opt_label GOTO INT_LITERAL stmt_end
+    (44) statement -> . opt_label CONTINUE stmt_end
+    (45) opt_label -> . INT_LITERAL
+    (46) opt_label -> .
+
+    END             shift and go to state 121
+    INT_LITERAL     shift and go to state 33
+    ID              reduce using rule 46 (opt_label -> .)
+    PRINT           reduce using rule 46 (opt_label -> .)
+    READ            reduce using rule 46 (opt_label -> .)
+    IF              reduce using rule 46 (opt_label -> .)
+    DO              reduce using rule 46 (opt_label -> .)
+    GOTO            reduce using rule 46 (opt_label -> .)
+    CONTINUE        reduce using rule 46 (opt_label -> .)
+
+    statement                      shift and go to state 31
+    opt_label                      shift and go to state 32
+
+state 92
+
+    (7) program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END . newlines
+    (8) newlines -> . NL
+    (9) newlines -> . newlines NL
+
+    NL              shift and go to state 16
+
+    newlines                       shift and go to state 122
+
+state 93
+
+    (71) var_ref -> ID LPAREN . index_list RPAREN
+    (72) index_list -> . index_list COMMA expr
+    (73) index_list -> . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    index_list                     shift and go to state 123
+    expr                           shift and go to state 82
+    var_ref                        shift and go to state 80
+
+state 94
+
+    (31) statement -> opt_label ID EQUALS expr stmt_end .
+
+    END             reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    INT_LITERAL     reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    ID              reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    PRINT           reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    READ            reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    IF              reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    DO              reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    GOTO            reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    CONTINUE        reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    ENDIF           reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+    ELSE            reduce using rule 31 (statement -> opt_label ID EQUALS expr stmt_end .)
+
+
+state 95
+
+    (47) expr -> expr PLUS . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 124
+    var_ref                        shift and go to state 80
+
+state 96
+
+    (48) expr -> expr MINUS . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 125
+    var_ref                        shift and go to state 80
+
+state 97
+
+    (49) expr -> expr STAR . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 126
+    var_ref                        shift and go to state 80
+
+state 98
+
+    (50) expr -> expr SLASH . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 127
+    var_ref                        shift and go to state 80
+
+state 99
+
+    (51) expr -> expr POWER . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 128
+    var_ref                        shift and go to state 80
+
+state 100
+
+    (52) expr -> expr EQ . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 129
+    var_ref                        shift and go to state 80
+
+state 101
+
+    (53) expr -> expr NE . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 130
+    var_ref                        shift and go to state 80
+
+state 102
+
+    (54) expr -> expr LT . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 131
+    var_ref                        shift and go to state 80
+
+state 103
+
+    (55) expr -> expr LE . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 132
+    var_ref                        shift and go to state 80
+
+state 104
+
+    (56) expr -> expr GT . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 133
+    var_ref                        shift and go to state 80
+
+state 105
+
+    (57) expr -> expr GE . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 134
+    var_ref                        shift and go to state 80
+
+state 106
+
+    (58) expr -> expr AND . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 135
+    var_ref                        shift and go to state 80
+
+state 107
+
+    (59) expr -> expr OR . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 136
+    var_ref                        shift and go to state 80
+
+state 108
+
+    (61) expr -> PLUS expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    PLUS            reduce using rule 61 (expr -> PLUS expr .)
+    MINUS           reduce using rule 61 (expr -> PLUS expr .)
+    STAR            reduce using rule 61 (expr -> PLUS expr .)
+    SLASH           reduce using rule 61 (expr -> PLUS expr .)
+    EQ              reduce using rule 61 (expr -> PLUS expr .)
+    NE              reduce using rule 61 (expr -> PLUS expr .)
+    LT              reduce using rule 61 (expr -> PLUS expr .)
+    LE              reduce using rule 61 (expr -> PLUS expr .)
+    GT              reduce using rule 61 (expr -> PLUS expr .)
+    GE              reduce using rule 61 (expr -> PLUS expr .)
+    AND             reduce using rule 61 (expr -> PLUS expr .)
+    OR              reduce using rule 61 (expr -> PLUS expr .)
+    NL              reduce using rule 61 (expr -> PLUS expr .)
+    LABEL_NL        reduce using rule 61 (expr -> PLUS expr .)
+    RPAREN          reduce using rule 61 (expr -> PLUS expr .)
+    COMMA           reduce using rule 61 (expr -> PLUS expr .)
+    POWER           shift and go to state 99
+
+  ! POWER           [ reduce using rule 61 (expr -> PLUS expr .) ]
+  ! PLUS            [ shift and go to state 95 ]
+  ! MINUS           [ shift and go to state 96 ]
+  ! STAR            [ shift and go to state 97 ]
+  ! SLASH           [ shift and go to state 98 ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 109
+
+    (60) expr -> MINUS expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    PLUS            reduce using rule 60 (expr -> MINUS expr .)
+    MINUS           reduce using rule 60 (expr -> MINUS expr .)
+    STAR            reduce using rule 60 (expr -> MINUS expr .)
+    SLASH           reduce using rule 60 (expr -> MINUS expr .)
+    EQ              reduce using rule 60 (expr -> MINUS expr .)
+    NE              reduce using rule 60 (expr -> MINUS expr .)
+    LT              reduce using rule 60 (expr -> MINUS expr .)
+    LE              reduce using rule 60 (expr -> MINUS expr .)
+    GT              reduce using rule 60 (expr -> MINUS expr .)
+    GE              reduce using rule 60 (expr -> MINUS expr .)
+    AND             reduce using rule 60 (expr -> MINUS expr .)
+    OR              reduce using rule 60 (expr -> MINUS expr .)
+    NL              reduce using rule 60 (expr -> MINUS expr .)
+    LABEL_NL        reduce using rule 60 (expr -> MINUS expr .)
+    RPAREN          reduce using rule 60 (expr -> MINUS expr .)
+    COMMA           reduce using rule 60 (expr -> MINUS expr .)
+    POWER           shift and go to state 99
+
+  ! POWER           [ reduce using rule 60 (expr -> MINUS expr .) ]
+  ! PLUS            [ shift and go to state 95 ]
+  ! MINUS           [ shift and go to state 96 ]
+  ! STAR            [ shift and go to state 97 ]
+  ! SLASH           [ shift and go to state 98 ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 110
+
+    (62) expr -> NOT expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    AND             reduce using rule 62 (expr -> NOT expr .)
+    OR              reduce using rule 62 (expr -> NOT expr .)
+    NL              reduce using rule 62 (expr -> NOT expr .)
+    LABEL_NL        reduce using rule 62 (expr -> NOT expr .)
+    RPAREN          reduce using rule 62 (expr -> NOT expr .)
+    COMMA           reduce using rule 62 (expr -> NOT expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+
+  ! PLUS            [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! MINUS           [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! STAR            [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! SLASH           [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! POWER           [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! EQ              [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! NE              [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! LT              [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! LE              [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! GT              [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! GE              [ reduce using rule 62 (expr -> NOT expr .) ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 111
+
+    (63) expr -> LPAREN expr . RPAREN
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    RPAREN          shift and go to state 137
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+
+
+state 112
+
+    (32) statement -> opt_label ID LPAREN index_list RPAREN . EQUALS expr stmt_end
+
+    EQUALS          shift and go to state 138
+
+
+state 113
+
+    (72) index_list -> index_list COMMA . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 139
+    var_ref                        shift and go to state 80
+
+state 114
+
+    (33) statement -> opt_label PRINT STAR COMMA print_list . stmt_end
+    (35) print_list -> print_list . COMMA expr
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    COMMA           shift and go to state 140
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 141
+
+state 115
+
+    (36) print_list -> expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    COMMA           reduce using rule 36 (print_list -> expr .)
+    NL              reduce using rule 36 (print_list -> expr .)
+    LABEL_NL        reduce using rule 36 (print_list -> expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+
+
+state 116
+
+    (37) statement -> opt_label READ STAR COMMA read_list . stmt_end
+    (38) read_list -> read_list . COMMA var_ref
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    COMMA           shift and go to state 142
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 143
+
+state 117
+
+    (39) read_list -> var_ref .
+
+    COMMA           reduce using rule 39 (read_list -> var_ref .)
+    NL              reduce using rule 39 (read_list -> var_ref .)
+    LABEL_NL        reduce using rule 39 (read_list -> var_ref .)
+
+
+state 118
+
+    (40) statement -> opt_label IF LPAREN expr RPAREN . THEN NL statement_list ENDIF stmt_end
+    (41) statement -> opt_label IF LPAREN expr RPAREN . THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+
+    THEN            shift and go to state 144
+
+
+state 119
+
+    (42) statement -> opt_label DO INT_LITERAL ID EQUALS . expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 145
+    var_ref                        shift and go to state 80
+
+state 120
+
+    (22) dim_list -> dim_list COMMA INT_LITERAL .
+
+    RPAREN          reduce using rule 22 (dim_list -> dim_list COMMA INT_LITERAL .)
+    COMMA           reduce using rule 22 (dim_list -> dim_list COMMA INT_LITERAL .)
+
+
+state 121
+
+    (6) program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END . newlines
+    (8) newlines -> . NL
+    (9) newlines -> . newlines NL
+
+    NL              shift and go to state 16
+
+    newlines                       shift and go to state 146
+
+state 122
+
+    (7) program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .
+    (9) newlines -> newlines . NL
+
+    PROGRAM         reduce using rule 7 (program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    SUBROUTINE      reduce using rule 7 (program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    INTEGER         reduce using rule 7 (program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    REAL            reduce using rule 7 (program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    LOGICAL         reduce using rule 7 (program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    CHARACTER       reduce using rule 7 (program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    $end            reduce using rule 7 (program_unit -> SUBROUTINE ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    NL              shift and go to state 20
+
+
+state 123
+
+    (71) var_ref -> ID LPAREN index_list . RPAREN
+    (72) index_list -> index_list . COMMA expr
+
+    RPAREN          shift and go to state 147
+    COMMA           shift and go to state 113
+
+
+state 124
+
+    (47) expr -> expr PLUS expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    PLUS            reduce using rule 47 (expr -> expr PLUS expr .)
+    MINUS           reduce using rule 47 (expr -> expr PLUS expr .)
+    EQ              reduce using rule 47 (expr -> expr PLUS expr .)
+    NE              reduce using rule 47 (expr -> expr PLUS expr .)
+    LT              reduce using rule 47 (expr -> expr PLUS expr .)
+    LE              reduce using rule 47 (expr -> expr PLUS expr .)
+    GT              reduce using rule 47 (expr -> expr PLUS expr .)
+    GE              reduce using rule 47 (expr -> expr PLUS expr .)
+    AND             reduce using rule 47 (expr -> expr PLUS expr .)
+    OR              reduce using rule 47 (expr -> expr PLUS expr .)
+    NL              reduce using rule 47 (expr -> expr PLUS expr .)
+    LABEL_NL        reduce using rule 47 (expr -> expr PLUS expr .)
+    RPAREN          reduce using rule 47 (expr -> expr PLUS expr .)
+    COMMA           reduce using rule 47 (expr -> expr PLUS expr .)
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+
+  ! STAR            [ reduce using rule 47 (expr -> expr PLUS expr .) ]
+  ! SLASH           [ reduce using rule 47 (expr -> expr PLUS expr .) ]
+  ! POWER           [ reduce using rule 47 (expr -> expr PLUS expr .) ]
+  ! PLUS            [ shift and go to state 95 ]
+  ! MINUS           [ shift and go to state 96 ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 125
+
+    (48) expr -> expr MINUS expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    PLUS            reduce using rule 48 (expr -> expr MINUS expr .)
+    MINUS           reduce using rule 48 (expr -> expr MINUS expr .)
+    EQ              reduce using rule 48 (expr -> expr MINUS expr .)
+    NE              reduce using rule 48 (expr -> expr MINUS expr .)
+    LT              reduce using rule 48 (expr -> expr MINUS expr .)
+    LE              reduce using rule 48 (expr -> expr MINUS expr .)
+    GT              reduce using rule 48 (expr -> expr MINUS expr .)
+    GE              reduce using rule 48 (expr -> expr MINUS expr .)
+    AND             reduce using rule 48 (expr -> expr MINUS expr .)
+    OR              reduce using rule 48 (expr -> expr MINUS expr .)
+    NL              reduce using rule 48 (expr -> expr MINUS expr .)
+    LABEL_NL        reduce using rule 48 (expr -> expr MINUS expr .)
+    RPAREN          reduce using rule 48 (expr -> expr MINUS expr .)
+    COMMA           reduce using rule 48 (expr -> expr MINUS expr .)
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+
+  ! STAR            [ reduce using rule 48 (expr -> expr MINUS expr .) ]
+  ! SLASH           [ reduce using rule 48 (expr -> expr MINUS expr .) ]
+  ! POWER           [ reduce using rule 48 (expr -> expr MINUS expr .) ]
+  ! PLUS            [ shift and go to state 95 ]
+  ! MINUS           [ shift and go to state 96 ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 126
+
+    (49) expr -> expr STAR expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    PLUS            reduce using rule 49 (expr -> expr STAR expr .)
+    MINUS           reduce using rule 49 (expr -> expr STAR expr .)
+    STAR            reduce using rule 49 (expr -> expr STAR expr .)
+    SLASH           reduce using rule 49 (expr -> expr STAR expr .)
+    EQ              reduce using rule 49 (expr -> expr STAR expr .)
+    NE              reduce using rule 49 (expr -> expr STAR expr .)
+    LT              reduce using rule 49 (expr -> expr STAR expr .)
+    LE              reduce using rule 49 (expr -> expr STAR expr .)
+    GT              reduce using rule 49 (expr -> expr STAR expr .)
+    GE              reduce using rule 49 (expr -> expr STAR expr .)
+    AND             reduce using rule 49 (expr -> expr STAR expr .)
+    OR              reduce using rule 49 (expr -> expr STAR expr .)
+    NL              reduce using rule 49 (expr -> expr STAR expr .)
+    LABEL_NL        reduce using rule 49 (expr -> expr STAR expr .)
+    RPAREN          reduce using rule 49 (expr -> expr STAR expr .)
+    COMMA           reduce using rule 49 (expr -> expr STAR expr .)
+    POWER           shift and go to state 99
+
+  ! POWER           [ reduce using rule 49 (expr -> expr STAR expr .) ]
+  ! PLUS            [ shift and go to state 95 ]
+  ! MINUS           [ shift and go to state 96 ]
+  ! STAR            [ shift and go to state 97 ]
+  ! SLASH           [ shift and go to state 98 ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 127
+
+    (50) expr -> expr SLASH expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    PLUS            reduce using rule 50 (expr -> expr SLASH expr .)
+    MINUS           reduce using rule 50 (expr -> expr SLASH expr .)
+    STAR            reduce using rule 50 (expr -> expr SLASH expr .)
+    SLASH           reduce using rule 50 (expr -> expr SLASH expr .)
+    EQ              reduce using rule 50 (expr -> expr SLASH expr .)
+    NE              reduce using rule 50 (expr -> expr SLASH expr .)
+    LT              reduce using rule 50 (expr -> expr SLASH expr .)
+    LE              reduce using rule 50 (expr -> expr SLASH expr .)
+    GT              reduce using rule 50 (expr -> expr SLASH expr .)
+    GE              reduce using rule 50 (expr -> expr SLASH expr .)
+    AND             reduce using rule 50 (expr -> expr SLASH expr .)
+    OR              reduce using rule 50 (expr -> expr SLASH expr .)
+    NL              reduce using rule 50 (expr -> expr SLASH expr .)
+    LABEL_NL        reduce using rule 50 (expr -> expr SLASH expr .)
+    RPAREN          reduce using rule 50 (expr -> expr SLASH expr .)
+    COMMA           reduce using rule 50 (expr -> expr SLASH expr .)
+    POWER           shift and go to state 99
+
+  ! POWER           [ reduce using rule 50 (expr -> expr SLASH expr .) ]
+  ! PLUS            [ shift and go to state 95 ]
+  ! MINUS           [ shift and go to state 96 ]
+  ! STAR            [ shift and go to state 97 ]
+  ! SLASH           [ shift and go to state 98 ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 128
+
+    (51) expr -> expr POWER expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    PLUS            reduce using rule 51 (expr -> expr POWER expr .)
+    MINUS           reduce using rule 51 (expr -> expr POWER expr .)
+    STAR            reduce using rule 51 (expr -> expr POWER expr .)
+    SLASH           reduce using rule 51 (expr -> expr POWER expr .)
+    EQ              reduce using rule 51 (expr -> expr POWER expr .)
+    NE              reduce using rule 51 (expr -> expr POWER expr .)
+    LT              reduce using rule 51 (expr -> expr POWER expr .)
+    LE              reduce using rule 51 (expr -> expr POWER expr .)
+    GT              reduce using rule 51 (expr -> expr POWER expr .)
+    GE              reduce using rule 51 (expr -> expr POWER expr .)
+    AND             reduce using rule 51 (expr -> expr POWER expr .)
+    OR              reduce using rule 51 (expr -> expr POWER expr .)
+    NL              reduce using rule 51 (expr -> expr POWER expr .)
+    LABEL_NL        reduce using rule 51 (expr -> expr POWER expr .)
+    RPAREN          reduce using rule 51 (expr -> expr POWER expr .)
+    COMMA           reduce using rule 51 (expr -> expr POWER expr .)
+    POWER           shift and go to state 99
+
+  ! POWER           [ reduce using rule 51 (expr -> expr POWER expr .) ]
+  ! PLUS            [ shift and go to state 95 ]
+  ! MINUS           [ shift and go to state 96 ]
+  ! STAR            [ shift and go to state 97 ]
+  ! SLASH           [ shift and go to state 98 ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 129
+
+    (52) expr -> expr EQ expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    EQ              reduce using rule 52 (expr -> expr EQ expr .)
+    NE              reduce using rule 52 (expr -> expr EQ expr .)
+    LT              reduce using rule 52 (expr -> expr EQ expr .)
+    LE              reduce using rule 52 (expr -> expr EQ expr .)
+    GT              reduce using rule 52 (expr -> expr EQ expr .)
+    GE              reduce using rule 52 (expr -> expr EQ expr .)
+    AND             reduce using rule 52 (expr -> expr EQ expr .)
+    OR              reduce using rule 52 (expr -> expr EQ expr .)
+    NL              reduce using rule 52 (expr -> expr EQ expr .)
+    LABEL_NL        reduce using rule 52 (expr -> expr EQ expr .)
+    RPAREN          reduce using rule 52 (expr -> expr EQ expr .)
+    COMMA           reduce using rule 52 (expr -> expr EQ expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+
+  ! PLUS            [ reduce using rule 52 (expr -> expr EQ expr .) ]
+  ! MINUS           [ reduce using rule 52 (expr -> expr EQ expr .) ]
+  ! STAR            [ reduce using rule 52 (expr -> expr EQ expr .) ]
+  ! SLASH           [ reduce using rule 52 (expr -> expr EQ expr .) ]
+  ! POWER           [ reduce using rule 52 (expr -> expr EQ expr .) ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 130
+
+    (53) expr -> expr NE expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    EQ              reduce using rule 53 (expr -> expr NE expr .)
+    NE              reduce using rule 53 (expr -> expr NE expr .)
+    LT              reduce using rule 53 (expr -> expr NE expr .)
+    LE              reduce using rule 53 (expr -> expr NE expr .)
+    GT              reduce using rule 53 (expr -> expr NE expr .)
+    GE              reduce using rule 53 (expr -> expr NE expr .)
+    AND             reduce using rule 53 (expr -> expr NE expr .)
+    OR              reduce using rule 53 (expr -> expr NE expr .)
+    NL              reduce using rule 53 (expr -> expr NE expr .)
+    LABEL_NL        reduce using rule 53 (expr -> expr NE expr .)
+    RPAREN          reduce using rule 53 (expr -> expr NE expr .)
+    COMMA           reduce using rule 53 (expr -> expr NE expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+
+  ! PLUS            [ reduce using rule 53 (expr -> expr NE expr .) ]
+  ! MINUS           [ reduce using rule 53 (expr -> expr NE expr .) ]
+  ! STAR            [ reduce using rule 53 (expr -> expr NE expr .) ]
+  ! SLASH           [ reduce using rule 53 (expr -> expr NE expr .) ]
+  ! POWER           [ reduce using rule 53 (expr -> expr NE expr .) ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 131
+
+    (54) expr -> expr LT expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    EQ              reduce using rule 54 (expr -> expr LT expr .)
+    NE              reduce using rule 54 (expr -> expr LT expr .)
+    LT              reduce using rule 54 (expr -> expr LT expr .)
+    LE              reduce using rule 54 (expr -> expr LT expr .)
+    GT              reduce using rule 54 (expr -> expr LT expr .)
+    GE              reduce using rule 54 (expr -> expr LT expr .)
+    AND             reduce using rule 54 (expr -> expr LT expr .)
+    OR              reduce using rule 54 (expr -> expr LT expr .)
+    NL              reduce using rule 54 (expr -> expr LT expr .)
+    LABEL_NL        reduce using rule 54 (expr -> expr LT expr .)
+    RPAREN          reduce using rule 54 (expr -> expr LT expr .)
+    COMMA           reduce using rule 54 (expr -> expr LT expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+
+  ! PLUS            [ reduce using rule 54 (expr -> expr LT expr .) ]
+  ! MINUS           [ reduce using rule 54 (expr -> expr LT expr .) ]
+  ! STAR            [ reduce using rule 54 (expr -> expr LT expr .) ]
+  ! SLASH           [ reduce using rule 54 (expr -> expr LT expr .) ]
+  ! POWER           [ reduce using rule 54 (expr -> expr LT expr .) ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 132
+
+    (55) expr -> expr LE expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    EQ              reduce using rule 55 (expr -> expr LE expr .)
+    NE              reduce using rule 55 (expr -> expr LE expr .)
+    LT              reduce using rule 55 (expr -> expr LE expr .)
+    LE              reduce using rule 55 (expr -> expr LE expr .)
+    GT              reduce using rule 55 (expr -> expr LE expr .)
+    GE              reduce using rule 55 (expr -> expr LE expr .)
+    AND             reduce using rule 55 (expr -> expr LE expr .)
+    OR              reduce using rule 55 (expr -> expr LE expr .)
+    NL              reduce using rule 55 (expr -> expr LE expr .)
+    LABEL_NL        reduce using rule 55 (expr -> expr LE expr .)
+    RPAREN          reduce using rule 55 (expr -> expr LE expr .)
+    COMMA           reduce using rule 55 (expr -> expr LE expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+
+  ! PLUS            [ reduce using rule 55 (expr -> expr LE expr .) ]
+  ! MINUS           [ reduce using rule 55 (expr -> expr LE expr .) ]
+  ! STAR            [ reduce using rule 55 (expr -> expr LE expr .) ]
+  ! SLASH           [ reduce using rule 55 (expr -> expr LE expr .) ]
+  ! POWER           [ reduce using rule 55 (expr -> expr LE expr .) ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 133
+
+    (56) expr -> expr GT expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    EQ              reduce using rule 56 (expr -> expr GT expr .)
+    NE              reduce using rule 56 (expr -> expr GT expr .)
+    LT              reduce using rule 56 (expr -> expr GT expr .)
+    LE              reduce using rule 56 (expr -> expr GT expr .)
+    GT              reduce using rule 56 (expr -> expr GT expr .)
+    GE              reduce using rule 56 (expr -> expr GT expr .)
+    AND             reduce using rule 56 (expr -> expr GT expr .)
+    OR              reduce using rule 56 (expr -> expr GT expr .)
+    NL              reduce using rule 56 (expr -> expr GT expr .)
+    LABEL_NL        reduce using rule 56 (expr -> expr GT expr .)
+    RPAREN          reduce using rule 56 (expr -> expr GT expr .)
+    COMMA           reduce using rule 56 (expr -> expr GT expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+
+  ! PLUS            [ reduce using rule 56 (expr -> expr GT expr .) ]
+  ! MINUS           [ reduce using rule 56 (expr -> expr GT expr .) ]
+  ! STAR            [ reduce using rule 56 (expr -> expr GT expr .) ]
+  ! SLASH           [ reduce using rule 56 (expr -> expr GT expr .) ]
+  ! POWER           [ reduce using rule 56 (expr -> expr GT expr .) ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 134
+
+    (57) expr -> expr GE expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    EQ              reduce using rule 57 (expr -> expr GE expr .)
+    NE              reduce using rule 57 (expr -> expr GE expr .)
+    LT              reduce using rule 57 (expr -> expr GE expr .)
+    LE              reduce using rule 57 (expr -> expr GE expr .)
+    GT              reduce using rule 57 (expr -> expr GE expr .)
+    GE              reduce using rule 57 (expr -> expr GE expr .)
+    AND             reduce using rule 57 (expr -> expr GE expr .)
+    OR              reduce using rule 57 (expr -> expr GE expr .)
+    NL              reduce using rule 57 (expr -> expr GE expr .)
+    LABEL_NL        reduce using rule 57 (expr -> expr GE expr .)
+    RPAREN          reduce using rule 57 (expr -> expr GE expr .)
+    COMMA           reduce using rule 57 (expr -> expr GE expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+
+  ! PLUS            [ reduce using rule 57 (expr -> expr GE expr .) ]
+  ! MINUS           [ reduce using rule 57 (expr -> expr GE expr .) ]
+  ! STAR            [ reduce using rule 57 (expr -> expr GE expr .) ]
+  ! SLASH           [ reduce using rule 57 (expr -> expr GE expr .) ]
+  ! POWER           [ reduce using rule 57 (expr -> expr GE expr .) ]
+  ! EQ              [ shift and go to state 100 ]
+  ! NE              [ shift and go to state 101 ]
+  ! LT              [ shift and go to state 102 ]
+  ! LE              [ shift and go to state 103 ]
+  ! GT              [ shift and go to state 104 ]
+  ! GE              [ shift and go to state 105 ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 135
+
+    (58) expr -> expr AND expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    AND             reduce using rule 58 (expr -> expr AND expr .)
+    OR              reduce using rule 58 (expr -> expr AND expr .)
+    NL              reduce using rule 58 (expr -> expr AND expr .)
+    LABEL_NL        reduce using rule 58 (expr -> expr AND expr .)
+    RPAREN          reduce using rule 58 (expr -> expr AND expr .)
+    COMMA           reduce using rule 58 (expr -> expr AND expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+
+  ! PLUS            [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! MINUS           [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! STAR            [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! SLASH           [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! POWER           [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! EQ              [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! NE              [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! LT              [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! LE              [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! GT              [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! GE              [ reduce using rule 58 (expr -> expr AND expr .) ]
+  ! AND             [ shift and go to state 106 ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 136
+
+    (59) expr -> expr OR expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    OR              reduce using rule 59 (expr -> expr OR expr .)
+    NL              reduce using rule 59 (expr -> expr OR expr .)
+    LABEL_NL        reduce using rule 59 (expr -> expr OR expr .)
+    RPAREN          reduce using rule 59 (expr -> expr OR expr .)
+    COMMA           reduce using rule 59 (expr -> expr OR expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+
+  ! PLUS            [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! MINUS           [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! STAR            [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! SLASH           [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! POWER           [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! EQ              [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! NE              [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! LT              [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! LE              [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! GT              [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! GE              [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! AND             [ reduce using rule 59 (expr -> expr OR expr .) ]
+  ! OR              [ shift and go to state 107 ]
+
+
+state 137
+
+    (63) expr -> LPAREN expr RPAREN .
+
+    PLUS            reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    MINUS           reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    STAR            reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    SLASH           reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    POWER           reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    EQ              reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    NE              reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    LT              reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    LE              reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    GT              reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    GE              reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    AND             reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    OR              reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    NL              reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    LABEL_NL        reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    RPAREN          reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+    COMMA           reduce using rule 63 (expr -> LPAREN expr RPAREN .)
+
+
+state 138
+
+    (32) statement -> opt_label ID LPAREN index_list RPAREN EQUALS . expr stmt_end
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 148
+    var_ref                        shift and go to state 80
+
+state 139
+
+    (72) index_list -> index_list COMMA expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    RPAREN          reduce using rule 72 (index_list -> index_list COMMA expr .)
+    COMMA           reduce using rule 72 (index_list -> index_list COMMA expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+
+
+state 140
+
+    (35) print_list -> print_list COMMA . expr
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 149
+    var_ref                        shift and go to state 80
+
+state 141
+
+    (33) statement -> opt_label PRINT STAR COMMA print_list stmt_end .
+
+    END             reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    INT_LITERAL     reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    ID              reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    PRINT           reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    READ            reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    IF              reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    DO              reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    GOTO            reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    CONTINUE        reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    ENDIF           reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+    ELSE            reduce using rule 33 (statement -> opt_label PRINT STAR COMMA print_list stmt_end .)
+
+
+state 142
+
+    (38) read_list -> read_list COMMA . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    ID              shift and go to state 69
+
+    var_ref                        shift and go to state 150
+
+state 143
+
+    (37) statement -> opt_label READ STAR COMMA read_list stmt_end .
+
+    END             reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    INT_LITERAL     reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    ID              reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    PRINT           reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    READ            reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    IF              reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    DO              reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    GOTO            reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    CONTINUE        reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    ENDIF           reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+    ELSE            reduce using rule 37 (statement -> opt_label READ STAR COMMA read_list stmt_end .)
+
+
+state 144
+
+    (40) statement -> opt_label IF LPAREN expr RPAREN THEN . NL statement_list ENDIF stmt_end
+    (41) statement -> opt_label IF LPAREN expr RPAREN THEN . NL statement_list ELSE NL statement_list ENDIF stmt_end
+
+    NL              shift and go to state 151
+
+
+state 145
+
+    (42) statement -> opt_label DO INT_LITERAL ID EQUALS expr . COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    COMMA           shift and go to state 152
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+
+
+state 146
+
+    (6) program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .
+    (9) newlines -> newlines . NL
+
+    PROGRAM         reduce using rule 6 (program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    SUBROUTINE      reduce using rule 6 (program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    INTEGER         reduce using rule 6 (program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    REAL            reduce using rule 6 (program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    LOGICAL         reduce using rule 6 (program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    CHARACTER       reduce using rule 6 (program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    $end            reduce using rule 6 (program_unit -> type_spec FUNCTION ID LPAREN param_list RPAREN newlines declaration_list statement_list END newlines .)
+    NL              shift and go to state 20
+
+
+state 147
+
+    (71) var_ref -> ID LPAREN index_list RPAREN .
+
+    PLUS            reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    MINUS           reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    STAR            reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    SLASH           reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    POWER           reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    EQ              reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    NE              reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    LT              reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    LE              reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    GT              reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    GE              reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    AND             reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    OR              reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    NL              reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    LABEL_NL        reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    RPAREN          reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+    COMMA           reduce using rule 71 (var_ref -> ID LPAREN index_list RPAREN .)
+
+
+state 148
+
+    (32) statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr . stmt_end
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 153
+
+state 149
+
+    (35) print_list -> print_list COMMA expr .
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+
+    COMMA           reduce using rule 35 (print_list -> print_list COMMA expr .)
+    NL              reduce using rule 35 (print_list -> print_list COMMA expr .)
+    LABEL_NL        reduce using rule 35 (print_list -> print_list COMMA expr .)
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+
+
+state 150
+
+    (38) read_list -> read_list COMMA var_ref .
+
+    COMMA           reduce using rule 38 (read_list -> read_list COMMA var_ref .)
+    NL              reduce using rule 38 (read_list -> read_list COMMA var_ref .)
+    LABEL_NL        reduce using rule 38 (read_list -> read_list COMMA var_ref .)
+
+
+state 151
+
+    (40) statement -> opt_label IF LPAREN expr RPAREN THEN NL . statement_list ENDIF stmt_end
+    (41) statement -> opt_label IF LPAREN expr RPAREN THEN NL . statement_list ELSE NL statement_list ENDIF stmt_end
+    (27) statement_list -> . statement_list statement
+    (28) statement_list -> .
+
+    ENDIF           reduce using rule 28 (statement_list -> .)
+    ELSE            reduce using rule 28 (statement_list -> .)
+    INT_LITERAL     reduce using rule 28 (statement_list -> .)
+    ID              reduce using rule 28 (statement_list -> .)
+    PRINT           reduce using rule 28 (statement_list -> .)
+    READ            reduce using rule 28 (statement_list -> .)
+    IF              reduce using rule 28 (statement_list -> .)
+    DO              reduce using rule 28 (statement_list -> .)
+    GOTO            reduce using rule 28 (statement_list -> .)
+    CONTINUE        reduce using rule 28 (statement_list -> .)
+
+    statement_list                 shift and go to state 154
+
+state 152
+
+    (42) statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA . expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (47) expr -> . expr PLUS expr
+    (48) expr -> . expr MINUS expr
+    (49) expr -> . expr STAR expr
+    (50) expr -> . expr SLASH expr
+    (51) expr -> . expr POWER expr
+    (52) expr -> . expr EQ expr
+    (53) expr -> . expr NE expr
+    (54) expr -> . expr LT expr
+    (55) expr -> . expr LE expr
+    (56) expr -> . expr GT expr
+    (57) expr -> . expr GE expr
+    (58) expr -> . expr AND expr
+    (59) expr -> . expr OR expr
+    (60) expr -> . MINUS expr
+    (61) expr -> . PLUS expr
+    (62) expr -> . NOT expr
+    (63) expr -> . LPAREN expr RPAREN
+    (64) expr -> . INT_LITERAL
+    (65) expr -> . REAL_LITERAL
+    (66) expr -> . TRUE
+    (67) expr -> . FALSE
+    (68) expr -> . STRING_LITERAL
+    (69) expr -> . var_ref
+    (70) var_ref -> . ID
+    (71) var_ref -> . ID LPAREN index_list RPAREN
+
+    MINUS           shift and go to state 72
+    PLUS            shift and go to state 71
+    NOT             shift and go to state 73
+    LPAREN          shift and go to state 74
+    INT_LITERAL     shift and go to state 75
+    REAL_LITERAL    shift and go to state 76
+    TRUE            shift and go to state 77
+    FALSE           shift and go to state 78
+    STRING_LITERAL  shift and go to state 79
+    ID              shift and go to state 69
+
+    expr                           shift and go to state 155
+    var_ref                        shift and go to state 80
+
+state 153
+
+    (32) statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .
+
+    END             reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    INT_LITERAL     reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    ID              reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    PRINT           reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    READ            reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    IF              reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    DO              reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    GOTO            reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    CONTINUE        reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    ENDIF           reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+    ELSE            reduce using rule 32 (statement -> opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end .)
+
+
+state 154
+
+    (40) statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list . ENDIF stmt_end
+    (41) statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list . ELSE NL statement_list ENDIF stmt_end
+    (27) statement_list -> statement_list . statement
+    (31) statement -> . opt_label ID EQUALS expr stmt_end
+    (32) statement -> . opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end
+    (33) statement -> . opt_label PRINT STAR COMMA print_list stmt_end
+    (34) statement -> . opt_label PRINT STAR stmt_end
+    (37) statement -> . opt_label READ STAR COMMA read_list stmt_end
+    (40) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+    (42) statement -> . opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (43) statement -> . opt_label GOTO INT_LITERAL stmt_end
+    (44) statement -> . opt_label CONTINUE stmt_end
+    (45) opt_label -> . INT_LITERAL
+    (46) opt_label -> .
+
+    ENDIF           shift and go to state 156
+    ELSE            shift and go to state 157
+    INT_LITERAL     shift and go to state 33
+    ID              reduce using rule 46 (opt_label -> .)
+    PRINT           reduce using rule 46 (opt_label -> .)
+    READ            reduce using rule 46 (opt_label -> .)
+    IF              reduce using rule 46 (opt_label -> .)
+    DO              reduce using rule 46 (opt_label -> .)
+    GOTO            reduce using rule 46 (opt_label -> .)
+    CONTINUE        reduce using rule 46 (opt_label -> .)
+
+    opt_label                      shift and go to state 32
+    statement                      shift and go to state 31
+
+state 155
+
+    (42) statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr . stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (47) expr -> expr . PLUS expr
+    (48) expr -> expr . MINUS expr
+    (49) expr -> expr . STAR expr
+    (50) expr -> expr . SLASH expr
+    (51) expr -> expr . POWER expr
+    (52) expr -> expr . EQ expr
+    (53) expr -> expr . NE expr
+    (54) expr -> expr . LT expr
+    (55) expr -> expr . LE expr
+    (56) expr -> expr . GT expr
+    (57) expr -> expr . GE expr
+    (58) expr -> expr . AND expr
+    (59) expr -> expr . OR expr
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    PLUS            shift and go to state 95
+    MINUS           shift and go to state 96
+    STAR            shift and go to state 97
+    SLASH           shift and go to state 98
+    POWER           shift and go to state 99
+    EQ              shift and go to state 100
+    NE              shift and go to state 101
+    LT              shift and go to state 102
+    LE              shift and go to state 103
+    GT              shift and go to state 104
+    GE              shift and go to state 105
+    AND             shift and go to state 106
+    OR              shift and go to state 107
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 158
+
+state 156
+
+    (40) statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF . stmt_end
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 159
+
+state 157
+
+    (41) statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE . NL statement_list ENDIF stmt_end
+
+    NL              shift and go to state 160
+
+
+state 158
+
+    (42) statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end . statement_list INT_LITERAL CONTINUE stmt_end
+    (27) statement_list -> . statement_list statement
+    (28) statement_list -> .
+
+    INT_LITERAL     reduce using rule 28 (statement_list -> .)
+    ID              reduce using rule 28 (statement_list -> .)
+    PRINT           reduce using rule 28 (statement_list -> .)
+    READ            reduce using rule 28 (statement_list -> .)
+    IF              reduce using rule 28 (statement_list -> .)
+    DO              reduce using rule 28 (statement_list -> .)
+    GOTO            reduce using rule 28 (statement_list -> .)
+    CONTINUE        reduce using rule 28 (statement_list -> .)
+
+    statement_list                 shift and go to state 161
+
+state 159
+
+    (40) statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .
+
+    END             reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    INT_LITERAL     reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    ID              reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    PRINT           reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    READ            reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    IF              reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    DO              reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    GOTO            reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    CONTINUE        reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    ENDIF           reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+    ELSE            reduce using rule 40 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end .)
+
+
+state 160
+
+    (41) statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL . statement_list ENDIF stmt_end
+    (27) statement_list -> . statement_list statement
+    (28) statement_list -> .
+
+    ENDIF           reduce using rule 28 (statement_list -> .)
+    INT_LITERAL     reduce using rule 28 (statement_list -> .)
+    ID              reduce using rule 28 (statement_list -> .)
+    PRINT           reduce using rule 28 (statement_list -> .)
+    READ            reduce using rule 28 (statement_list -> .)
+    IF              reduce using rule 28 (statement_list -> .)
+    DO              reduce using rule 28 (statement_list -> .)
+    GOTO            reduce using rule 28 (statement_list -> .)
+    CONTINUE        reduce using rule 28 (statement_list -> .)
+
+    statement_list                 shift and go to state 162
+
+state 161
+
+    (42) statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list . INT_LITERAL CONTINUE stmt_end
+    (27) statement_list -> statement_list . statement
+    (31) statement -> . opt_label ID EQUALS expr stmt_end
+    (32) statement -> . opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end
+    (33) statement -> . opt_label PRINT STAR COMMA print_list stmt_end
+    (34) statement -> . opt_label PRINT STAR stmt_end
+    (37) statement -> . opt_label READ STAR COMMA read_list stmt_end
+    (40) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+    (42) statement -> . opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (43) statement -> . opt_label GOTO INT_LITERAL stmt_end
+    (44) statement -> . opt_label CONTINUE stmt_end
+    (45) opt_label -> . INT_LITERAL
+    (46) opt_label -> .
+
+    INT_LITERAL     shift and go to state 163
+    ID              reduce using rule 46 (opt_label -> .)
+    PRINT           reduce using rule 46 (opt_label -> .)
+    READ            reduce using rule 46 (opt_label -> .)
+    IF              reduce using rule 46 (opt_label -> .)
+    DO              reduce using rule 46 (opt_label -> .)
+    GOTO            reduce using rule 46 (opt_label -> .)
+    CONTINUE        reduce using rule 46 (opt_label -> .)
+
+    opt_label                      shift and go to state 32
+    statement                      shift and go to state 31
+
+state 162
+
+    (41) statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list . ENDIF stmt_end
+    (27) statement_list -> statement_list . statement
+    (31) statement -> . opt_label ID EQUALS expr stmt_end
+    (32) statement -> . opt_label ID LPAREN index_list RPAREN EQUALS expr stmt_end
+    (33) statement -> . opt_label PRINT STAR COMMA print_list stmt_end
+    (34) statement -> . opt_label PRINT STAR stmt_end
+    (37) statement -> . opt_label READ STAR COMMA read_list stmt_end
+    (40) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ENDIF stmt_end
+    (41) statement -> . opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end
+    (42) statement -> . opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end
+    (43) statement -> . opt_label GOTO INT_LITERAL stmt_end
+    (44) statement -> . opt_label CONTINUE stmt_end
+    (45) opt_label -> . INT_LITERAL
+    (46) opt_label -> .
+
+    ENDIF           shift and go to state 164
+    INT_LITERAL     shift and go to state 33
+    ID              reduce using rule 46 (opt_label -> .)
+    PRINT           reduce using rule 46 (opt_label -> .)
+    READ            reduce using rule 46 (opt_label -> .)
+    IF              reduce using rule 46 (opt_label -> .)
+    DO              reduce using rule 46 (opt_label -> .)
+    GOTO            reduce using rule 46 (opt_label -> .)
+    CONTINUE        reduce using rule 46 (opt_label -> .)
+
+    opt_label                      shift and go to state 32
+    statement                      shift and go to state 31
+
+state 163
+
+    (42) statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL . CONTINUE stmt_end
+    (45) opt_label -> INT_LITERAL .
+
+  ! shift/reduce conflict for CONTINUE resolved as shift
+    CONTINUE        shift and go to state 165
+    ID              reduce using rule 45 (opt_label -> INT_LITERAL .)
+    PRINT           reduce using rule 45 (opt_label -> INT_LITERAL .)
+    READ            reduce using rule 45 (opt_label -> INT_LITERAL .)
+    IF              reduce using rule 45 (opt_label -> INT_LITERAL .)
+    DO              reduce using rule 45 (opt_label -> INT_LITERAL .)
+    GOTO            reduce using rule 45 (opt_label -> INT_LITERAL .)
+
+  ! CONTINUE        [ reduce using rule 45 (opt_label -> INT_LITERAL .) ]
+
+
+state 164
+
+    (41) statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF . stmt_end
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 166
+
+state 165
+
+    (42) statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE . stmt_end
+    (29) stmt_end -> . NL
+    (30) stmt_end -> . LABEL_NL
+
+    NL              shift and go to state 61
+    LABEL_NL        shift and go to state 62
+
+    stmt_end                       shift and go to state 167
+
+state 166
+
+    (41) statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .
+
+    END             reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    INT_LITERAL     reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    ID              reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    PRINT           reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    READ            reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    IF              reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    DO              reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    GOTO            reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    CONTINUE        reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    ENDIF           reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+    ELSE            reduce using rule 41 (statement -> opt_label IF LPAREN expr RPAREN THEN NL statement_list ELSE NL statement_list ENDIF stmt_end .)
+
+
+state 167
+
+    (42) statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .
+
+    END             reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    INT_LITERAL     reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    ID              reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    PRINT           reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    READ            reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    IF              reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    DO              reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    GOTO            reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    CONTINUE        reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    ENDIF           reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+    ELSE            reduce using rule 42 (statement -> opt_label DO INT_LITERAL ID EQUALS expr COMMA expr stmt_end statement_list INT_LITERAL CONTINUE stmt_end .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for CONTINUE in state 163 resolved as shift
