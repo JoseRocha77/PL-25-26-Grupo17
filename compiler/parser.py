@@ -182,9 +182,15 @@ def p_stmt_print_empty(p):
 # READ *, var, var, ...
 def p_stmt_read(p):
     """stmt : opt_label READ STAR COMMA expr_list nls"""
-    targets = [e for e in p[5] if isinstance(e, VarRef)]
+    targets = []
+    for e in p[5]:
+        if isinstance(e, VarRef):
+            targets.append(e)
+        elif isinstance(e, FunctionCall):
+            # NUMS(I) é parseado como FunctionCall mas é acesso a array
+            targets.append(VarRef(name=e.name, indices=e.args))
     p[0] = ReadStmt(label=p[1], targets=targets)
-
+    
 # IF-THEN-ENDIF
 def p_stmt_if(p):
     """stmt : opt_label IF LPAREN expr RPAREN THEN nls stmt_list ENDIF nls"""

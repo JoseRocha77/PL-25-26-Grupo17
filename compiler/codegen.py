@@ -1,6 +1,5 @@
 """
 EWVM code generator for Fortran 77.
-Translates the AST into EWVM assembly instructions.
 """
 from .ast import *
 from .symboltable import SymbolTable
@@ -12,35 +11,21 @@ class CodeGenerator:
     def __init__(self):
         self.code: list[str] = []
         self._label_counter = 0
-        self._unit_name = None        # current function/subroutine name
+        self._unit_name = None
         self._sym: SymbolTable | None = None
-
-    # ------------------------------------------------------------------
-    # Public entry point
-    # ------------------------------------------------------------------
 
     def generate(self, program: Program) -> str:
         self._sym = SymbolTable()
-
-        # Register all units globally
         for unit in program.units:
             if unit.kind != 'program':
                 self._sym.add_function(unit)
-
-        # Generate main program first, then subprograms
         main = next((u for u in program.units if u.kind == 'program'), None)
         subs = [u for u in program.units if u.kind != 'program']
-
         if main:
             self._gen_unit(main)
         for sub in subs:
             self._gen_unit(sub)
-
         return '\n'.join(self.code)
-
-    # ------------------------------------------------------------------
-    # Unit (PROGRAM / FUNCTION / SUBROUTINE)
-    # ------------------------------------------------------------------
 
     def _gen_unit(self, unit: ProgramUnit):
         self._unit_name = unit.name.upper()
@@ -51,10 +36,8 @@ class CodeGenerator:
         else:
             self._label(f'F{self._unit_name}')
 
-        # Assign offsets and push initial values for declared variables
         offset = 0
 
-        # For functions: return value slot at offset 0
         if unit.return_type is not None:
             ret_decl = VarDecl(name=unit.name.upper(), dimensions=[],
                                is_global=False, scope_offset=offset)
@@ -62,7 +45,6 @@ class CodeGenerator:
             self._push_default(unit.return_type)
             offset += 1
 
-        # Parameters: already on stack before CALL, assign negative offsets
         param_offset = -(len(unit.params))
         for pname in unit.params:
             pd = VarDecl(name=pname.upper(), dimensions=[], is_global=False,
@@ -84,16 +66,13 @@ class CodeGenerator:
                     self._sym.add_variable(vd, decl.var_type)
                 except Exception:
                     pass
-
                 if len(vd.dimensions) == 0:
                     self._push_default(decl.var_type)
                     offset += 1
                 else:
-                    # Allocate array on heap; store pointer
                     self._emit(f'ALLOC {size}')
                     offset += 1
 
-        # Generate statements
         for stmt in unit.body:
             self._gen_stmt(stmt)
 
@@ -104,12 +83,7 @@ class CodeGenerator:
 
         self._sym.pop_scope()
 
-    # ------------------------------------------------------------------
-    # Statements
-    # ------------------------------------------------------------------
-
     def _gen_stmt(self, stmt: Statement):
-        # Emit statement label if present
         lbl = getattr(stmt, 'label', None)
         if lbl is not None:
             self._label(self._stmt_label(lbl))
@@ -129,13 +103,12 @@ class CodeGenerator:
                 decl = self._sym.lookup_var(target.name)
                 sym  = self._sym.lookup(target.name)
                 if len(target.indices) > 0 and decl is not None:
-                    # Array: STOREN expects [base_ptr, offset, value] on stack
+                    # Array: precisa de [base_ptr, offset, valor] para STOREN
                     instr = 'PUSHL' if not decl.is_global else 'PUSHG'
-                    self._emit(f'{instr} {decl.scope_offset}')  # base pointer
-                    self._gen_expr(target.indices[0])            # index
+                    self._emit(f'{instr} {decl.scope_offset}')
+                    self._gen_expr(target.indices[0])
                     self._emit('PUSHI 1')
-                    self._emit('SUB')                            # index - 1
-                    # Read value
+                    self._emit('SUB')
                     if sym and sym.sym_type == FortranType.REAL:
                         self._emit('READ')
                         self._emit('ATOF')
@@ -144,7 +117,6 @@ class CodeGenerator:
                         self._emit('ATOI')
                     self._emit('STOREN')
                 else:
-                    # Scalar: read value then store
                     if sym and sym.sym_type == FortranType.REAL:
                         self._emit('READ')
                         self._emit('ATOF')
@@ -156,7 +128,6 @@ class CodeGenerator:
         elif isinstance(stmt, IfStmt):
             else_lbl = self._new_label('ELSE')
             end_lbl  = self._new_label('ENDIF')
-
             self._gen_expr(stmt.condition)
             self._emit(f'JZ {else_lbl}')
             for s in stmt.then_body:
@@ -170,23 +141,15 @@ class CodeGenerator:
         elif isinstance(stmt, DoStmt):
             start_lbl = self._new_label('DOSTART')
             end_lbl   = self._new_label('DOEND')
-
-            # Initialise loop variable
             self._gen_expr(stmt.start)
             self._store_name(stmt.var)
-
             self._label(start_lbl)
-
-            # Condition: var <= stop
             self._load_name(stmt.var)
             self._gen_expr(stmt.stop)
             self._emit('INFEQ')
             self._emit(f'JZ {end_lbl}')
-
             for s in stmt.body:
                 self._gen_stmt(s)
-
-            # Increment
             self._load_name(stmt.var)
             if stmt.step:
                 self._gen_expr(stmt.step)
@@ -194,7 +157,6 @@ class CodeGenerator:
                 self._emit('PUSHI 1')
             self._emit('ADD')
             self._store_name(stmt.var)
-
             self._emit(f'JUMP {start_lbl}')
             self._label(end_lbl)
 
@@ -202,7 +164,7 @@ class CodeGenerator:
             self._emit(f'JUMP {self._stmt_label(stmt.target)}')
 
         elif isinstance(stmt, ContinueStmt):
-            pass  # label already emitted above
+            pass
 
         elif isinstance(stmt, ReturnStmt):
             self._emit('RETURN')
@@ -217,32 +179,22 @@ class CodeGenerator:
             if stmt.args:
                 self._emit(f'POP {len(stmt.args)}')
 
-    # ------------------------------------------------------------------
-    # Expressions
-    # ------------------------------------------------------------------
-
     def _gen_expr(self, expr: Expression):
         if isinstance(expr, IntLiteral):
             self._emit(f'PUSHI {expr.value}')
-
         elif isinstance(expr, RealLiteral):
             self._emit(f'PUSHF {expr.value:.10f}')
-
         elif isinstance(expr, LogicalLiteral):
             self._emit(f'PUSHI {1 if expr.value else 0}')
-
         elif isinstance(expr, StringLiteral):
             escaped = expr.value.replace('"', '')
             self._emit(f'PUSHS "{escaped}"')
-
         elif isinstance(expr, VarRef):
             self._load_varref(expr)
-
         elif isinstance(expr, BinaryExpr):
             self._gen_expr(expr.left)
             self._gen_expr(expr.right)
             self._emit(self._binop_instr(expr.op))
-
         elif isinstance(expr, UnaryExpr):
             self._gen_expr(expr.operand)
             if expr.op == '-':
@@ -250,7 +202,6 @@ class CodeGenerator:
                 self._emit('MUL')
             elif expr.op == '.NOT.':
                 self._emit('NOT')
-
         elif isinstance(expr, FunctionCall):
             self._gen_funcall(expr)
 
@@ -259,10 +210,10 @@ class CodeGenerator:
         # Verifica se é um array declarado (ex: NUMS(I))
         decl = self._sym.lookup_var(name)
         if decl is not None:
-             # É um acesso a array — trata como VarRef com índices
-             self._load_varref(VarRef(name=call.name, indices=call.args))
-             return
-    # Funções intrínsecas
+            # É um acesso a array — trata como VarRef com índices
+            self._load_varref(VarRef(name=call.name, indices=call.args))
+            return
+        # Funções intrínsecas
         if name == 'MOD':
             self._gen_expr(call.args[0])
             self._gen_expr(call.args[1])
@@ -286,24 +237,17 @@ class CodeGenerator:
                 self._gen_expr(arg)
             self._emit(f'CALL F{name}')
 
-    # ------------------------------------------------------------------
-    # Variable load / store helpers
-    # ------------------------------------------------------------------
-
     def _load_varref(self, ref: VarRef):
         decl = self._sym.lookup_var(ref.name)
         if decl is None:
             print(f"[CodeGen] Warning: undeclared variable '{ref.name}', assuming 0")
             self._emit('PUSHI 0')
             return
-
         instr = 'PUSHL' if not decl.is_global else 'PUSHG'
-
         if len(ref.indices) == 0:
-            # Scalar
             self._emit(f'{instr} {decl.scope_offset}')
         else:
-            # Array: push base pointer, then compute index-1, then LOADN
+            # Array load: base_ptr, index-1, LOADN
             self._emit(f'{instr} {decl.scope_offset}')
             self._gen_expr(ref.indices[0])
             self._emit('PUSHI 1')
@@ -315,25 +259,17 @@ class CodeGenerator:
         if decl is None:
             print(f"[CodeGen] Warning: undeclared variable '{ref.name}'")
             return
-
         instr = 'PUSHL' if not decl.is_global else 'PUSHG'
-
         if len(ref.indices) == 0:
-            # Scalar store — value already on stack
             store_instr = 'STOREL' if not decl.is_global else 'STOREG'
             self._emit(f'{store_instr} {decl.scope_offset}')
         else:
-            # Array store: EWVM STOREN expects stack = [base_ptr, offset, value]
-            # value is on top from the expression
-            # We need to push base_ptr and offset BEFORE the value
-            # Use a temporary store trick: save value, push address, restore value
-            # Simpler: use SWAP to reorder
-            # Stack before: [value]
-            self._emit(f'{instr} {decl.scope_offset}')   # [value, base_ptr]
-            self._gen_expr(ref.indices[0])                # [value, base_ptr, index]
+            # Array store: stack tem [valor] no topo
+            # Precisamos de [base_ptr, index-1, valor] para STOREN
+            self._emit(f'{instr} {decl.scope_offset}')
+            self._gen_expr(ref.indices[0])
             self._emit('PUSHI 1')
-            self._emit('SUB')                             # [value, base_ptr, index-1]
-            # Rotate: bring value to top → [base_ptr, index-1, value]
+            self._emit('SUB')
             self._emit('ROT')
             self._emit('STOREN')
 
@@ -350,10 +286,6 @@ class CodeGenerator:
         if decl:
             instr = 'STOREL' if not decl.is_global else 'STOREG'
             self._emit(f'{instr} {decl.scope_offset}')
-
-    # ------------------------------------------------------------------
-    # Write helper
-    # ------------------------------------------------------------------
 
     def _emit_write(self, expr: Expression):
         if isinstance(expr, StringLiteral):
@@ -375,10 +307,6 @@ class CodeGenerator:
         else:
             self._emit('WRITEI')
 
-    # ------------------------------------------------------------------
-    # Binary operator mapping
-    # ------------------------------------------------------------------
-
     def _binop_instr(self, op: str) -> str:
         return {
             '+':     'ADD',
@@ -387,7 +315,7 @@ class CodeGenerator:
             '/':     'DIV',
             '**':    'MUL',
             '.EQ.':  'EQUAL',
-            '.NE.':  'EQUAL\n NOT',
+            '.NE.':  'EQUAL\nNOT',
             '.LT.':  'INF',
             '.LE.':  'INFEQ',
             '.GT.':  'SUP',
@@ -395,10 +323,6 @@ class CodeGenerator:
             '.AND.': 'AND',
             '.OR.':  'OR',
         }.get(op, f'// unknown op {op}')
-
-    # ------------------------------------------------------------------
-    # Label helpers
-    # ------------------------------------------------------------------
 
     def _new_label(self, prefix: str) -> str:
         self._label_counter += 1
@@ -414,10 +338,6 @@ class CodeGenerator:
             clean += ':'
         self.code.append(clean)
 
-    # ------------------------------------------------------------------
-    # Default value for a type
-    # ------------------------------------------------------------------
-
     def _push_default(self, t: FortranType):
         if t == FortranType.REAL:
             self._emit('PUSHF 0.0000000000')
@@ -426,14 +346,11 @@ class CodeGenerator:
         else:
             self._emit('PUSHI 0')
 
-    # ------------------------------------------------------------------
-    # Emit
-    # ------------------------------------------------------------------
-
     def _emit(self, instr: str):
-        clean = instr.replace('\r', '').strip()
-        if clean:
-            self.code.append(f' {clean}')
+        for line in instr.replace('\r', '').split('\n'):
+            line = line.strip()
+            if line:
+                self.code.append(f' {line}')
 
 
 def generate(program: Program) -> str:
