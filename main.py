@@ -36,8 +36,8 @@ def compile_file(path: str) -> int:
 
     # Write output
     out_path = os.path.splitext(path)[0] + '.vm'
-    with open(out_path, 'w') as f:
-        f.write(ewvm_code)
+    with open(out_path, 'w', newline='\n') as f:
+            f.write(ewvm_code)
 
     print(ewvm_code)
     print(f"\n=== Output written to: {out_path} ===")

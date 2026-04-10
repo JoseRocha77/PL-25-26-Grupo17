@@ -53,12 +53,12 @@ tokens = list(reserved.values()) + [
 
     # Punctuation
     'COMMA', 'LPAREN', 'RPAREN', 'EQUALS', 'STAR', 'SLASH',
-    'PLUS', 'MINUS', 'COLON',
+    'PLUS', 'MINUS', 
 
     # Special
-    'LABEL',     # numeric label at start of statement
+        # numeric label at start of statement
     'NL',        
-    'LABEL_NL',
+
 ]
 
 # ---------------------------------------------------------------------------
@@ -74,7 +74,7 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA  = r','
 t_EQUALS = r'='
-t_COLON  = r':'
+#t_COLON  = r':'
 
 t_ignore = ' \t\r'
 
@@ -165,13 +165,14 @@ def t_COMMENT(t):
 # Newlines — track line numbers; emit LABEL if line starts with a number
 # ---------------------------------------------------------------------------
 
-def t_LABEL_NL(t):
-    r'\n\s*[0-9]+'
+
+#def t_LABEL_NL(t):
+#    r'\n\s*[0-9]+'
     # Captura uma nova linha seguida de um número (Label)
-    t.lexer.lineno += 1
+#   t.lexer.lineno += 1
     # Extraímos apenas o número para o valor do token
-    t.value = int(re.search(r'[0-9]+', t.value).group())
-    return t
+#    t.value = int(re.search(r'[0-9]+', t.value).group())
+#    return t
 
 def t_NL(t):
     r'\n+'

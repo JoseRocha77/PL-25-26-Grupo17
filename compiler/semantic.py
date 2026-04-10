@@ -108,6 +108,7 @@ class SemanticAnalyser:
                 labels |= self._collect_labels(s.then_body)
                 labels |= self._collect_labels(s.else_body)
             elif isinstance(s, DoStmt):
+                labels.add(s.end_label)
                 labels |= self._collect_labels(s.body)
         return labels
 
@@ -163,7 +164,7 @@ class SemanticAnalyser:
 
     def _analyse_expr(self, expr: Expression):
         if isinstance(expr, (IntLiteral, RealLiteral, LogicalLiteral, StringLiteral)):
-            pass
+          pass
 
         elif isinstance(expr, VarRef):
             self._resolve_varref(expr)
@@ -177,8 +178,15 @@ class SemanticAnalyser:
 
         elif isinstance(expr, FunctionCall):
             name = expr.name.upper()
-            if name not in BUILTINS and self.table.lookup_unit(name) is None:
-                self._err(f"Undefined function '{name}'")
+            # Verifica se é um array declarado (ex: NUMS(I))
+            var_decl = self.table.lookup_var(name)
+            if var_decl is not None:
+                # É um array — analisa os índices
+                for idx in expr.args:
+                    self._analyse_expr(idx)
+        elif name not in BUILTINS and self.table.lookup_unit(name) is None:
+            self._err(f"Undefined function '{name}'")
+        else:
             for arg in expr.args:
                 self._analyse_expr(arg)
 
