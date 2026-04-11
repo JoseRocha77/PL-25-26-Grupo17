@@ -57,17 +57,26 @@ class SemanticAnalyser:
             offset += 1
 
         for decl in unit.declarations:
-            for vd in decl.variables:
-                vd.is_global = (unit.kind == 'program')
-                vd.scope_offset = offset
-                size = 1
-                for d in vd.dimensions:
-                    size *= d
-                offset += size
-                try:
-                    self.table.add_variable(vd, decl.var_type)
-                except SymbolTableError as e:
-                    self._err(str(e))
+              for vd in decl.variables:
+                 vd.is_global = (unit.kind == 'program')
+                 # Se já existe como parâmetro, apenas atualiza o tipo
+                 existing = self.table.lookup_var(vd.name)
+                 if existing is not None:
+                    # Re-declaração de parâmetro — apenas atualiza o tipo na tabela
+                    sym = self.table.lookup(vd.name)
+                    if sym:
+                      sym.sym_type = decl.var_type
+                      vd.scope_offset = existing.scope_offset
+                    continue
+                 vd.scope_offset = offset
+                 size = 1
+                 for d in vd.dimensions:
+                     size *= d
+                 offset += size
+                 try:
+                     self.table.add_variable(vd, decl.var_type)
+                 except SymbolTableError as e:
+                     self._err(str(e))
 
         for stmt in unit.body:
             self._analyse_stmt(stmt)

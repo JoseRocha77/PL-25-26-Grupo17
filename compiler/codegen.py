@@ -13,6 +13,7 @@ class CodeGenerator:
         self._label_counter = 0
         self._unit_name = None
         self._sym: SymbolTable | None = None
+        self._current_unit: ProgramUnit | None = None
 
     def generate(self, program: Program) -> str:
         self._sym = SymbolTable()
@@ -29,6 +30,7 @@ class CodeGenerator:
 
     def _gen_unit(self, unit: ProgramUnit):
         self._unit_name = unit.name.upper()
+        self._current_unit = unit
         self._sym.push_scope()
 
         if unit.kind == 'program':
@@ -58,6 +60,16 @@ class CodeGenerator:
         for decl in unit.declarations:
             for vd in decl.variables:
                 vd.is_global = (unit.kind == 'program')
+                # Se o nome e uma funcao registada, nao declarar como variavel
+                if self._sym.lookup_unit(vd.name) is not None:
+                    continue
+                existing = self._sym.lookup_var(vd.name)
+                if existing is not None:
+                    sym = self._sym.lookup(vd.name)
+                    if sym:
+                        sym.sym_type = decl.var_type
+                        vd.scope_offset = existing.scope_offset
+                    continue
                 vd.scope_offset = offset
                 size = 1
                 for d in vd.dimensions:
@@ -79,6 +91,9 @@ class CodeGenerator:
         if unit.kind == 'program':
             self._emit('STOP')
         else:
+            # Para funcoes: colocar valor de retorno no topo da stack antes de RETURN
+            if unit.return_type is not None:
+                self._emit('PUSHL 0')
             self._emit('RETURN')
 
         self._sym.pop_scope()
@@ -103,7 +118,6 @@ class CodeGenerator:
                 decl = self._sym.lookup_var(target.name)
                 sym  = self._sym.lookup(target.name)
                 if len(target.indices) > 0 and decl is not None:
-                    # Array: precisa de [base_ptr, offset, valor] para STOREN
                     instr = 'PUSHL' if not decl.is_global else 'PUSHG'
                     self._emit(f'{instr} {decl.scope_offset}')
                     self._gen_expr(target.indices[0])
@@ -167,15 +181,20 @@ class CodeGenerator:
             pass
 
         elif isinstance(stmt, ReturnStmt):
+            # RETURN explícito dentro de uma função — coloca valor de retorno na stack
+            if self._current_unit and self._current_unit.return_type is not None:
+                self._emit('PUSHL 0')
             self._emit('RETURN')
 
         elif isinstance(stmt, StopStmt):
             self._emit('STOP')
 
         elif isinstance(stmt, CallStmt):
+            # Subroutine call — PUSHA + CALL
             for arg in stmt.args:
                 self._gen_expr(arg)
-            self._emit(f'CALL F{stmt.name.upper()}')
+            self._emit(f'PUSHA F{stmt.name.upper()}')
+            self._emit('CALL')
             if stmt.args:
                 self._emit(f'POP {len(stmt.args)}')
 
@@ -207,13 +226,13 @@ class CodeGenerator:
 
     def _gen_funcall(self, call: FunctionCall):
         name = call.name.upper()
-        # Verifica se é um array declarado (ex: NUMS(I))
+        # So trata como array se for variavel E NAO for funcao registada
         decl = self._sym.lookup_var(name)
-        if decl is not None:
-            # É um acesso a array — trata como VarRef com índices
+        unit = self._sym.lookup_unit(name)
+        if decl is not None and unit is None:
             self._load_varref(VarRef(name=call.name, indices=call.args))
             return
-        # Funções intrínsecas
+        # Funcoes intrinsecas
         if name == 'MOD':
             self._gen_expr(call.args[0])
             self._gen_expr(call.args[1])
@@ -233,9 +252,11 @@ class CodeGenerator:
                 self._gen_expr(arg)
                 self._emit('MAX' if name == 'MAX' else 'MIN')
         else:
+            # Funcao definida pelo utilizador — PUSHA + CALL
             for arg in call.args:
                 self._gen_expr(arg)
-            self._emit(f'CALL F{name}')
+            self._emit(f'PUSHA F{name}')
+            self._emit('CALL')
 
     def _load_varref(self, ref: VarRef):
         decl = self._sym.lookup_var(ref.name)
@@ -247,7 +268,6 @@ class CodeGenerator:
         if len(ref.indices) == 0:
             self._emit(f'{instr} {decl.scope_offset}')
         else:
-            # Array load: base_ptr, index-1, LOADN
             self._emit(f'{instr} {decl.scope_offset}')
             self._gen_expr(ref.indices[0])
             self._emit('PUSHI 1')
@@ -264,8 +284,6 @@ class CodeGenerator:
             store_instr = 'STOREL' if not decl.is_global else 'STOREG'
             self._emit(f'{store_instr} {decl.scope_offset}')
         else:
-            # Array store: stack tem [valor] no topo
-            # Precisamos de [base_ptr, index-1, valor] para STOREN
             self._emit(f'{instr} {decl.scope_offset}')
             self._gen_expr(ref.indices[0])
             self._emit('PUSHI 1')
