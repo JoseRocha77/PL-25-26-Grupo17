@@ -209,23 +209,23 @@ def p_stmt_if_goto(p):
                   else_body=[])
 
 # IF (...) stmt  — Fortran logical IF com qualquer statement simples
-def p_stmt_if_inline(p):
-    """stmt : opt_label IF LPAREN expr RPAREN inline_stmt"""
-    p[0] = IfStmt(label=p[1], condition=p[4],
-                  then_body=[p[6]], else_body=[])
+# def p_stmt_if_inline(p):
+#     """stmt : opt_label IF LPAREN expr RPAREN inline_stmt"""
+#     p[0] = IfStmt(label=p[1], condition=p[4],
+#                   then_body=[p[6]], else_body=[])
 
-# Statements simples que podem aparecer depois de IF (...)
-def p_inline_stmt_assign(p):
-    """inline_stmt : ID EQUALS expr nls"""
-    p[0] = AssignStmt(label=None, target=VarRef(name=p[1]), value=p[3])
+# # Statements simples que podem aparecer depois de IF (...)
+# def p_inline_stmt_assign(p):
+#     """inline_stmt : ID EQUALS expr nls"""
+#     p[0] = AssignStmt(label=None, target=VarRef(name=p[1]), value=p[3])
 
-def p_inline_stmt_goto(p):
-    """inline_stmt : GOTO INT_LITERAL nls"""
-    p[0] = GotoStmt(label=None, target=p[2])
+# def p_inline_stmt_goto(p):
+#     """inline_stmt : GOTO INT_LITERAL nls"""
+#     p[0] = GotoStmt(label=None, target=p[2])
 
-def p_inline_stmt_stop(p):
-    """inline_stmt : STOP nls"""
-    p[0] = StopStmt(label=None)
+# def p_inline_stmt_stop(p):
+#     """inline_stmt : STOP nls"""
+#     p[0] = StopStmt(label=None)
 
 # DO loop:  DO label VAR = start, stop [, step] NL  body  label CONTINUE NL
 def p_stmt_do(p):
