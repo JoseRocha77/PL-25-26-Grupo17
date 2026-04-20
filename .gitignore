@@ -10,9 +10,6 @@ __pycache__/
 compiler/parser.out
 compiler/parsetab.py
 
-# Ficheiros gerados pela Máquina Virtual
-*.vm
-
 # Ambiente Virtual
 venv/
 EOT
