@@ -1,0 +1,18 @@
+cat <<EOT >> .gitignore
+# Ficheiros do IDE
+.idea/
+
+# Caches do Python
+__pycache__/
+*.pyc
+
+# Ficheiros auto-gerados pelo PLY (Parser)
+compiler/parser.out
+compiler/parsetab.py
+
+# Ficheiros gerados pela Máquina Virtual
+*.vm
+
+# Ambiente Virtual
+venv/
+EOT

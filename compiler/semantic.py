@@ -1,12 +1,14 @@
 """
-Semantic analyser for Fortran 77.
+Analisador Semântico para o Compilador Fortran 77.
 """
+from typing import Set, List
 from compiler.ast import *
 from compiler.symboltable import SymbolTable, SymbolTableError
 
 class SemanticError(Exception):
     pass
 
+# Funções intrínsecas do Fortran 77
 BUILTINS = {
     'MOD':  FortranType.INTEGER,
     'ABS':  FortranType.REAL,
@@ -18,24 +20,29 @@ BUILTINS = {
 }
 
 class SemanticAnalyser:
-    def __init__(self):
-        self.table   = SymbolTable()
-        self.errors  = []
-        self.current_unit = None
-        self._labels: set[int] = set()
+    def __init__(self) -> None:
+        # Inicializa a tabela de símbolos e as estruturas de validação
+        self.table: SymbolTable = SymbolTable()
+        self.errors: List[str] = []
+        self.current_unit: ProgramUnit | None = None
+        self._labels: Set[int] = set()
 
     def analyse(self, program: Program) -> bool:
+        # Orquestra a análise: primeiro regista as funções e depois varre cada bloco de código
         for unit in program.units:
             if unit.kind != 'program':
                 try:
                     self.table.add_function(unit)
                 except SymbolTableError as e:
                     self._err(str(e))
+                    
         for unit in program.units:
             self._analyse_unit(unit)
+            
         return len(self.errors) == 0
 
-    def _analyse_unit(self, unit: ProgramUnit):
+    def _analyse_unit(self, unit: ProgramUnit) -> None:
+        # Calcula offsets de memória, regista variáveis locais e valida o corpo do programa
         self.current_unit = unit
         self.table.push_scope()
         self._labels = self._collect_labels(unit.body)
@@ -57,38 +64,44 @@ class SemanticAnalyser:
             offset += 1
 
         for decl in unit.declarations:
-              for vd in decl.variables:
-                 vd.is_global = (unit.kind == 'program')
-                 # Se já existe como parâmetro, apenas atualiza o tipo
-                 existing = self.table.lookup_var(vd.name)
-                 if existing is not None:
-                    # Re-declaração de parâmetro — apenas atualiza o tipo na tabela
+            for vd in decl.variables:
+                vd.is_global = (unit.kind == 'program')
+                
+                existing = self.table.lookup_var(vd.name)
+                if existing is not None:
+                    # Se já era parâmetro, atualiza apenas o tipo na tabela de símbolos
                     sym = self.table.lookup(vd.name)
                     if sym:
-                      sym.sym_type = decl.var_type
-                      vd.scope_offset = existing.scope_offset
+                        sym.sym_type = decl.var_type
+                        vd.scope_offset = existing.scope_offset
                     continue
-                 vd.scope_offset = offset
-                 size = 1
-                 for d in vd.dimensions:
-                     size *= d
-                 offset += size
-                 try:
-                     self.table.add_variable(vd, decl.var_type)
-                 except SymbolTableError as e:
-                     self._err(str(e))
+                    
+                vd.scope_offset = offset
+                
+                # Calcula o espaço necessário na memória (1 para escalares, N para arrays)
+                size = 1
+                for d in vd.dimensions:
+                    size *= d
+                offset += size
+                
+                try:
+                    self.table.add_variable(vd, decl.var_type)
+                except SymbolTableError as e:
+                    self._err(str(e))
 
         for stmt in unit.body:
             self._analyse_stmt(stmt)
 
         self.table.pop_scope()
 
-    def _collect_labels(self, stmts: list) -> set[int]:
+    def _collect_labels(self, stmts: list) -> Set[int]:
+        # Varre a AST recursivamente para descobrir todas as labels disponíveis para GOTO/DO
         labels = set()
         for s in stmts:
             lbl = getattr(s, 'label', None)
             if lbl is not None:
                 labels.add(lbl)
+                
             if isinstance(s, IfStmt):
                 labels |= self._collect_labels(s.then_body)
                 labels |= self._collect_labels(s.else_body)
@@ -97,7 +110,8 @@ class SemanticAnalyser:
                 labels |= self._collect_labels(s.body)
         return labels
 
-    def _analyse_stmt(self, stmt: Statement):
+    def _analyse_stmt(self, stmt: Statement) -> None:
+        # Despachante que valida semanticamente cada tipo de instrução
         if isinstance(stmt, AssignStmt):
             self._resolve_varref(stmt.target)
             self._analyse_expr(stmt.value)
@@ -118,21 +132,23 @@ class SemanticAnalyser:
             self._analyse_expr(stmt.stop)
             if stmt.step:
                 self._analyse_expr(stmt.step)
+            # Garante que o DO aponta para um CONTINUE válido
             if stmt.end_label not in self._labels:
-                self._err(f"DO loop end label {stmt.end_label} has no matching CONTINUE")
+                self._err(f"A label de fim do ciclo DO ({stmt.end_label}) não tem um CONTINUE correspondente.")
             for s in stmt.body:
                 self._analyse_stmt(s)
         elif isinstance(stmt, GotoStmt):
             if stmt.target not in self._labels:
-                self._err(f"GOTO target label {stmt.target} is not defined")
+                self._err(f"A label de destino do GOTO ({stmt.target}) não está definida.")
         elif isinstance(stmt, CallStmt):
             unit = self.table.lookup_unit(stmt.name)
             if unit is None and stmt.name.upper() not in BUILTINS:
-                self._err(f"Undefined subroutine '{stmt.name}'")
+                self._err(f"Subrotina não definida: '{stmt.name}'")
             for arg in stmt.args:
                 self._analyse_expr(arg)
 
-    def _analyse_expr(self, expr: Expression):
+    def _analyse_expr(self, expr: Expression) -> None:
+        # Analisa expressões, destrinçando a clássica ambiguidade Fortran entre Arrays e Funções
         if isinstance(expr, (IntLiteral, RealLiteral, LogicalLiteral, StringLiteral)):
             pass
         elif isinstance(expr, VarRef):
@@ -144,19 +160,20 @@ class SemanticAnalyser:
             self._analyse_expr(expr.operand)
         elif isinstance(expr, FunctionCall):
             name = expr.name.upper()
-            # Verifica se é um array declarado (ex: NUMS(I))
             var_decl = self.table.lookup_var(name)
+            
             if var_decl is not None:
-                # É um array — analisa os índices
+                # É um acesso a Array (ex: LISTA(I)), e não uma chamada de função
                 for idx in expr.args:
                     self._analyse_expr(idx)
             elif name not in BUILTINS and self.table.lookup_unit(name) is None:
-                self._err(f"Undefined function '{name}'")
+                self._err(f"Função não definida: '{name}'")
             else:
                 for arg in expr.args:
                     self._analyse_expr(arg)
 
-    def _resolve_varref(self, ref: VarRef):
+    def _resolve_varref(self, ref: VarRef) -> None:
+        # Liga a variável à sua declaração. Aplica a Regra I-N se a variável não foi declarada.
         decl = self.table.lookup_var(ref.name)
         if decl is None:
             first = ref.name[0].upper()
@@ -169,13 +186,16 @@ class SemanticAnalyser:
             ref.decl = vd
         else:
             ref.decl = decl
+            
         for idx in ref.indices:
             self._analyse_expr(idx)
 
-    def _err(self, msg: str):
-        print(f"[Semantic Error] {msg}")
+    def _err(self, msg: str) -> None:
+        # Centraliza o registo de erros e imprime no terminal
+        print(f"[Erro Semântico] {msg}")
         self.errors.append(msg)
 
 
 def analyse(program: Program) -> bool:
+    # Função de atalho importada no main.py
     return SemanticAnalyser().analyse(program)

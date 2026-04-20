@@ -1,13 +1,14 @@
 """
-Fortran 77 Lexer (free-form) using PLY.
+Analisador Lexical (Lexer) para Fortran 77 (Formato Livre).
+Usa a biblioteca PLY para ler o ficheiro e parti-lo numa lista de tokens.
 """
 import re
 import ply.lex
+from ply.lex import LexToken
 
 # ---------------------------------------------------------------------------
-# Token list
+# Palavras Reservadas do Fortran
 # ---------------------------------------------------------------------------
-
 reserved = {
     'PROGRAM'    : 'PROGRAM',
     'END'        : 'END',
@@ -31,40 +32,27 @@ reserved = {
     'FUNCTION'   : 'FUNCTION',
 }
 
+# ---------------------------------------------------------------------------
+# Lista Completa de Tokens
+# ---------------------------------------------------------------------------
 tokens = list(reserved.values()) + [
-    # Literals
-    'INT_LITERAL',
-    'REAL_LITERAL',
-    'TRUE',
-    'FALSE',
-    'STRING_LITERAL',
-
-    # Identifiers
+    # Literais (Valores)
+    'INT_LITERAL', 'REAL_LITERAL', 'TRUE', 'FALSE', 'STRING_LITERAL',
+    # Identificadores (Nomes de variáveis e funções)
     'ID',
-
-    # Relational operators (Fortran style)
-    'EQ', 'NE', 'LT', 'LE', 'GT', 'GE',
-
-    # Logical operators
-    'AND', 'OR', 'NOT',
-
-    # Arithmetic
-    'POWER',     # **
-
-    # Punctuation
-    'COMMA', 'LPAREN', 'RPAREN', 'EQUALS', 'STAR', 'SLASH',
-    'PLUS', 'MINUS', 
-
-    # Special
-        # numeric label at start of statement
-    'NL',        
-
+    # Operadores Relacionais e Lógicos
+    'EQ', 'NE', 'LT', 'LE', 'GT', 'GE', 'AND', 'OR', 'NOT',
+    # Matemática
+    'POWER',
+    # Pontuação e Símbolos
+    'COMMA', 'LPAREN', 'RPAREN', 'EQUALS', 'STAR', 'SLASH', 'PLUS', 'MINUS',
+    # Fim de linha (crucial para o nosso Parser)
+    'NL',
 ]
 
 # ---------------------------------------------------------------------------
-# Simple tokens
+# Tokens Simples (Mapeamento Direto)
 # ---------------------------------------------------------------------------
-
 t_POWER  = r'\*\*'
 t_STAR   = r'\*'
 t_SLASH  = r'/'
@@ -74,130 +62,114 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA  = r','
 t_EQUALS = r'='
-#t_COLON  = r':'
 
+# Ignora espaços em branco e tabs
 t_ignore = ' \t\r'
 
 # ---------------------------------------------------------------------------
-# Fortran logical / relational operators  (.EQ. etc.)
+# Operadores Lógicos e Relacionais (.EQ., .AND., etc.)
 # ---------------------------------------------------------------------------
-
-def t_EQ(t):
+def t_EQ(t: LexToken) -> LexToken:
     r'\.EQ\.'
     return t
 
-def t_NE(t):
+def t_NE(t: LexToken) -> LexToken:
     r'\.NE\.'
     return t
 
-def t_LE(t):
+def t_LE(t: LexToken) -> LexToken:
     r'\.LE\.'
     return t
 
-def t_LT(t):
+def t_LT(t: LexToken) -> LexToken:
     r'\.LT\.'
     return t
 
-def t_GE(t):
+def t_GE(t: LexToken) -> LexToken:
     r'\.GE\.'
     return t
 
-def t_GT(t):
+def t_GT(t: LexToken) -> LexToken:
     r'\.GT\.'
     return t
 
-def t_AND(t):
+def t_AND(t: LexToken) -> LexToken:
     r'\.AND\.'
     return t
 
-def t_OR(t):
+def t_OR(t: LexToken) -> LexToken:
     r'\.OR\.'
     return t
 
-def t_NOT(t):
+def t_NOT(t: LexToken) -> LexToken:
     r'\.NOT\.'
     return t
 
-def t_TRUE(t):
+def t_TRUE(t: LexToken) -> LexToken:
     r'\.TRUE\.'
     t.value = True
     return t
 
-def t_FALSE(t):
+def t_FALSE(t: LexToken) -> LexToken:
     r'\.FALSE\.'
     t.value = False
     return t
 
 # ---------------------------------------------------------------------------
-# Identifiers and keywords  (case-insensitive)
+# Identificadores e Literais
 # ---------------------------------------------------------------------------
-
-def t_ID(t):
+def t_ID(t: LexToken) -> LexToken:
     r'[A-Za-z][A-Za-z0-9_]*'
+    # Verifica se a palavra é uma keyword (ex: IF). Se não for, assume que é uma variável (ID).
     t.type = reserved.get(t.value.upper(), 'ID')
     t.value = t.value.upper()
     return t
 
-# ---------------------------------------------------------------------------
-# Literals
-# ---------------------------------------------------------------------------
-
-# REAL_LITERAL deve vir antes de INT_LITERAL para não capturar apenas a parte inteira
-def t_REAL_LITERAL(t):
+def t_REAL_LITERAL(t: LexToken) -> LexToken:
     r'[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?|[0-9]+[eE][+-]?[0-9]+'
+    # Tem de vir definido antes do INT_LITERAL no código para o PLY apanhar os decimais primeiro
     t.value = float(t.value)
     return t
 
-def t_STRING_LITERAL(t):
+def t_STRING_LITERAL(t: LexToken) -> LexToken:
     r"'([^']|'')*'"
+    # Remove as aspas simples exteriores e converte duas aspas juntas ('') numa aspa de texto
     t.value = t.value[1:-1].replace("''", "'")
     return t
 
-# ---------------------------------------------------------------------------
-# Comments (! to end of line, Fortran 90+ style; also C in col 1 — free-form
-# ---------------------------------------------------------------------------
-
-def t_COMMENT(t):
-    r'!.*'
-    pass   # discard
-
-# ---------------------------------------------------------------------------
-# Newlines — track line numbers; emit LABEL if line starts with a number
-# ---------------------------------------------------------------------------
-
-
-#def t_LABEL_NL(t):
-#    r'\n\s*[0-9]+'
-    # Captura uma nova linha seguida de um número (Label)
-#   t.lexer.lineno += 1
-    # Extraímos apenas o número para o valor do token
-#    t.value = int(re.search(r'[0-9]+', t.value).group())
-#    return t
-
-def t_NL(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-    return t
-
-# INT_LITERAL definido depois de LABEL_NL para evitar conflitos no início de linha
-def t_INT_LITERAL(t):
+def t_INT_LITERAL(t: LexToken) -> LexToken:
     r'[0-9]+'
     t.value = int(t.value)
     return t
 
 # ---------------------------------------------------------------------------
-# Error handling
+# Comentários e Quebras de Linha
 # ---------------------------------------------------------------------------
+def t_COMMENT(t: LexToken) -> None:
+    r'!.*'
+    # Apanha tudo desde o '!' até ao fim da linha e descarta (não gera token)
+    pass
 
-def t_error(t):
-    print(f"[Lexer] Illegal character '{t.value[0]}' at line {t.lexer.lineno}")
+def t_NL(t: LexToken) -> LexToken:
+    r'\n+'
+    # Vai contando as quebras de linha para podermos dizer a linha certa nos avisos de erro
+    t.lexer.lineno += len(t.value)
+    return t
+
+# ---------------------------------------------------------------------------
+# Tratamento de Erros
+# ---------------------------------------------------------------------------
+def t_error(t: LexToken) -> None:
+    print(f"[Lexer] Caráter ilegal '{t.value[0]}' na linha {t.lexer.lineno}")
+    # Ignora o caráter estranho e continua para não rebentar o compilador
     t.lexer.skip(1)
 
 # ---------------------------------------------------------------------------
-# Build
+# Inicialização
 # ---------------------------------------------------------------------------
-
+# Fortran é case-insensitive, logo ligamos a flag do regex para ignorar maiúsculas/minúsculas
 lexer = ply.lex.lex(reflags=re.IGNORECASE)
 
-def create_lexer():
+def create_lexer() -> ply.lex.Lexer:
+    # Função que exporta o lexer fresquinho para ser usado pelo nosso parser
     return ply.lex.lex(reflags=re.IGNORECASE)
