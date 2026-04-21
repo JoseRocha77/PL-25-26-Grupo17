@@ -34,10 +34,11 @@ def p_nls(p):
 # Estrutura do Programa
 # ---------------------------------------------------------------------------
 def p_program(p):
-    """program : unit_list"""
-    # Procura a unidade principal ('program') e junta tudo no nó raiz da AST
-    main = next((u for u in p[1] if u.kind == 'program'), p[1][0])
-    p[0] = Program(name=main.name, units=p[1])
+    """program : unit_list
+               | nls unit_list"""
+    units = p[1] if len(p) == 2 else p[2]
+    main = next((u for u in units if u.kind == 'program'), units[0])
+    p[0] = Program(name=main.name, units=units)
 
 def p_unit_list_one(p):
     """unit_list : unit"""
