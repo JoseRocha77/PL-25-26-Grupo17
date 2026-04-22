@@ -244,6 +244,9 @@ class CodeGenerator:
         elif isinstance(expr, VarRef):
             self._load_varref(expr)
         elif isinstance(expr, BinaryExpr):
+            if expr.op == '**':
+                self._gen_power(expr.left, expr.right)
+            else:
                 self._gen_expr(expr.left)
                 self._gen_expr(expr.right)
                 self._emit(self._binop_instr(expr.op))
@@ -377,6 +380,35 @@ class CodeGenerator:
             '.AND.': 'AND',
             '.OR.':  'OR',
         }.get(op, f'// unknown op {op}')
+    
+    def _gen_power(self, base: Expression, exp: Expression) -> None:
+        # Fallback para expoentes dinâmicos (X**Y onde Y é variável).
+        # Expoentes literais são resolvidos pelo optimizer via AST Lowering.
+        # Gera um ciclo de multiplicação em assembly:
+        #   result = 1
+        #   while counter > 0: result *= base; counter -= 1
+        start_lbl = self._new_label('POWSTART')
+        end_lbl   = self._new_label('POWEND')
+
+        self._emit('PUSHI 1')      # result = 1        stack: [result]
+        self._gen_expr(exp)        # counter = exp     stack: [result, counter]
+
+        self._label(start_lbl)
+        self._emit('DUP 1')        # stack: [result, counter, counter]
+        self._emit('PUSHI 0')
+        self._emit('SUP')          # counter > 0?
+        self._emit(f'JZ {end_lbl}')
+
+        self._emit('SWAP')         # stack: [counter, result]
+        self._gen_expr(base)       # stack: [counter, result, base]
+        self._emit('MUL')          # stack: [counter, result*base]
+        self._emit('SWAP')         # stack: [result*base, counter]
+        self._emit('PUSHI 1')
+        self._emit('SUB')          # stack: [result*base, counter-1]
+        self._emit(f'JUMP {start_lbl}')
+
+        self._label(end_lbl)
+        self._emit('POP 1')        # remove counter=0, fica só [result]
 
     def _new_label(self, prefix: str) -> str:
         # Gera labels únicas para IFs e ciclos DO
