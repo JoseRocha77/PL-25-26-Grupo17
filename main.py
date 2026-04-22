@@ -41,7 +41,11 @@ def compile_file(path: str) -> int:
     ast = optimizer.optimize(ast)
     
     if optimizer.optimizations_applied > 0:
-        print(f"[Otimizador] Aplicadas {optimizer.optimizations_applied} otimizações na AST.")
+        print("[Otimizador] Otimizações aplicadas:")
+        for nome, count in optimizer.stats.items():
+            if count > 0:
+                print(f"  ├─ {nome:<26} {count}")
+        print(f"  └─ {'Total':<26} {optimizer.optimizations_applied}")
     else:
         print("[Otimizador] O código já se encontrava otimizado.")
 

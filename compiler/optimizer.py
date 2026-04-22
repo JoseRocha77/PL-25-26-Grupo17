@@ -16,6 +16,15 @@ class ASTOptimizer:
         self.optimizations_applied: int = 0
         # Memória para a Propagação de Constantes (mapeia nome da variável -> valor literal)
         self.constants: Dict[str, Expression] = {}
+        # Contadores por tipo de otimização
+        self.stats: Dict[str, int] = {
+            'Constant Folding':         0,
+            'Constant Propagation':     0,
+            'Algebraic Simplification': 0,
+            'Strength Reduction':       0,
+            'Dead Code Elimination':    0,
+            'Logical Simplification':   0,
+        }
 
     def optimize(self, node: Program) -> Program:
         """Ponto de entrada principal do otimizador."""
@@ -159,6 +168,7 @@ class ASTOptimizer:
         """Substitui variáveis por valores fixos previamente memorizados."""
         if len(node.indices) == 0 and node.name in self.constants:
             self.optimizations_applied += 1
+            self.stats['Constant Propagation'] += 1
             return self.constants[node.name]
         return node
 
@@ -166,17 +176,20 @@ class ASTOptimizer:
         if isinstance(node, BinaryExpr) and node.op == '**':
             if isinstance(node.right, IntLiteral) and node.right.value == 0:
                 self.optimizations_applied += 1
+                self.stats['Strength Reduction'] += 1
                 return IntLiteral(1)
             if isinstance(node.right, IntLiteral) and node.right.value == 1:
                 self.optimizations_applied += 1
+                self.stats['Strength Reduction'] += 1
                 return node.left
             if isinstance(node.right, IntLiteral) and node.right.value > 1:
                 self.optimizations_applied += 1
+                self.stats['Strength Reduction'] += 1
                 n = node.right.value
                 result = node.left
                 for _ in range(n - 1):
                     result = BinaryExpr(op='*', left=result, right=node.left)
-                return self._visit(result)  # <-- visita o resultado para encadear com Folding
+                return self._visit(result)
         return node
 
     def _apply_constant_folding(self, node: Expression) -> Expression:
@@ -186,18 +199,18 @@ class ASTOptimizer:
                 l, r = node.left.value, node.right.value
                 
                 # Matemática
-                if node.op == '+': self.optimizations_applied += 1; return IntLiteral(l + r)
-                if node.op == '-': self.optimizations_applied += 1; return IntLiteral(l - r)
-                if node.op == '*': self.optimizations_applied += 1; return IntLiteral(l * r)
-                if node.op == '/' and r != 0: self.optimizations_applied += 1; return IntLiteral(l // r)
+                if node.op == '+': self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return IntLiteral(l + r)
+                if node.op == '-': self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return IntLiteral(l - r)
+                if node.op == '*': self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return IntLiteral(l * r)
+                if node.op == '/' and r != 0: self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return IntLiteral(l // r)
                 
                 # Relacionais 
-                if node.op == '.EQ.': self.optimizations_applied += 1; return LogicalLiteral(l == r)
-                if node.op == '.NE.': self.optimizations_applied += 1; return LogicalLiteral(l != r)
-                if node.op == '.LT.': self.optimizations_applied += 1; return LogicalLiteral(l < r)
-                if node.op == '.LE.': self.optimizations_applied += 1; return LogicalLiteral(l <= r)
-                if node.op == '.GT.': self.optimizations_applied += 1; return LogicalLiteral(l > r)
-                if node.op == '.GE.': self.optimizations_applied += 1; return LogicalLiteral(l >= r)
+                if node.op == '.EQ.': self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return LogicalLiteral(l == r)
+                if node.op == '.NE.': self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return LogicalLiteral(l != r)
+                if node.op == '.LT.': self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return LogicalLiteral(l < r)
+                if node.op == '.LE.': self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return LogicalLiteral(l <= r)
+                if node.op == '.GT.': self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return LogicalLiteral(l > r)
+                if node.op == '.GE.': self.optimizations_applied += 1; self.stats['Constant Folding'] += 1; return LogicalLiteral(l >= r)
                 
         return node
 
@@ -206,12 +219,15 @@ class ASTOptimizer:
         if isinstance(node, BinaryExpr):
             if node.op == '+' and isinstance(node.right, IntLiteral) and node.right.value == 0:
                 self.optimizations_applied += 1
+                self.stats['Algebraic Simplification'] += 1
                 return node.left
             if node.op == '*' and isinstance(node.right, IntLiteral) and node.right.value == 1:
                 self.optimizations_applied += 1
+                self.stats['Algebraic Simplification'] += 1
                 return node.left
             if node.op == '*' and isinstance(node.right, IntLiteral) and node.right.value == 0:
                 self.optimizations_applied += 1
+                self.stats['Algebraic Simplification'] += 1
                 return IntLiteral(0)
         return node
 
@@ -222,11 +238,13 @@ class ASTOptimizer:
             # Constant Folding Lógico: .NOT. (Verdadeiro) -> Falso
             if isinstance(node.operand, LogicalLiteral):
                 self.optimizations_applied += 1
+                self.stats['Logical Simplification'] += 1
                 return LogicalLiteral(not node.operand.value)
             
             # Dupla Negação: .NOT. (.NOT. X) -> X
             if isinstance(node.operand, UnaryExpr) and node.operand.op == '.NOT.':
                 self.optimizations_applied += 1
+                self.stats['Logical Simplification'] += 1
                 return node.operand.operand
             
             # Inversão: .NOT. (A < B) -> A >= B
@@ -237,6 +255,7 @@ class ASTOptimizer:
                 }
                 if node.operand.op in inverse_ops:
                     self.optimizations_applied += 1
+                    self.stats['Logical Simplification'] += 1
                     return BinaryExpr(inverse_ops[node.operand.op], node.operand.left, node.operand.right)
         return node
 
@@ -244,6 +263,7 @@ class ASTOptimizer:
         """Remove ramos de código que nunca vão ser executados."""
         if isinstance(node.condition, LogicalLiteral):
             self.optimizations_applied += 1
+            self.stats['Dead Code Elimination'] += 1
             
             surviving_body = node.then_body if node.condition.value else node.else_body
             surviving_body = self._visit(surviving_body) # Otimiza o bloco sobrevivente
