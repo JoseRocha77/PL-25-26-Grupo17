@@ -111,12 +111,19 @@ class CodeGenerator:
         if unit.kind == 'program':
             self._emit('STOP')
         else:
-            # Em funções, copia o valor de retorno para o topo da Stack antes de sair
-            if unit.return_type is not None:
-                self._emit('PUSHL 0')
-            self._emit('RETURN')
+            if not self._last_is_jump(unit.body):   # ← só emite se necessário
+                if unit.return_type is not None:
+                    self._emit('PUSHL 0')
+                self._emit('RETURN')
 
         self._sym.pop_scope()
+
+    def _last_is_jump(self, stmts: list) -> bool:
+        """Verifica se o último statement já transfere o fluxo."""
+        if not stmts:
+            return False
+        last = stmts[-1]
+        return isinstance(last, (GotoStmt, ReturnStmt, StopStmt))
 
     def _gen_stmt(self, stmt: Statement) -> None:
         # Despachante que traduz cada instrução Fortran para Assembly EWVM
@@ -169,7 +176,8 @@ class CodeGenerator:
             
             for s in stmt.then_body:
                 self._gen_stmt(s)
-            self._emit(f'JUMP {end_lbl}')
+            if not self._last_is_jump(stmt.then_body):  # ← só emite se necessário
+                self._emit(f'JUMP {end_lbl}')
             
             self._label(else_lbl)
             for s in stmt.else_body:
