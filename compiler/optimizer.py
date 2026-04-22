@@ -163,11 +163,20 @@ class ASTOptimizer:
         return node
 
     def _apply_strength_reduction(self, node: Expression) -> Expression:
-        """Troca operações pesadas por operações leves equivalentes (ex: X**2 -> X*X)."""
         if isinstance(node, BinaryExpr) and node.op == '**':
-            if isinstance(node.right, IntLiteral) and node.right.value == 2:
+            if isinstance(node.right, IntLiteral) and node.right.value == 0:
                 self.optimizations_applied += 1
-                return BinaryExpr(op='*', left=node.left, right=node.left)
+                return IntLiteral(1)
+            if isinstance(node.right, IntLiteral) and node.right.value == 1:
+                self.optimizations_applied += 1
+                return node.left
+            if isinstance(node.right, IntLiteral) and node.right.value > 1:
+                self.optimizations_applied += 1
+                n = node.right.value
+                result = node.left
+                for _ in range(n - 1):
+                    result = BinaryExpr(op='*', left=result, right=node.left)
+                return self._visit(result)  # <-- visita o resultado para encadear com Folding
         return node
 
     def _apply_constant_folding(self, node: Expression) -> Expression:

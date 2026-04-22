@@ -244,9 +244,9 @@ class CodeGenerator:
         elif isinstance(expr, VarRef):
             self._load_varref(expr)
         elif isinstance(expr, BinaryExpr):
-            self._gen_expr(expr.left)
-            self._gen_expr(expr.right)
-            self._emit(self._binop_instr(expr.op))
+                self._gen_expr(expr.left)
+                self._gen_expr(expr.right)
+                self._emit(self._binop_instr(expr.op))
         elif isinstance(expr, UnaryExpr):
             self._gen_expr(expr.operand)
             if expr.op == '-':
@@ -368,7 +368,6 @@ class CodeGenerator:
             '-':     'SUB',
             '*':     'MUL',
             '/':     'DIV',
-            '**':    'MUL',  # Fallback caso a EWVM não suporte potências nativas
             '.EQ.':  'EQUAL',
             '.NE.':  'EQUAL\nNOT',
             '.LT.':  'INF',
