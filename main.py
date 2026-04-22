@@ -39,15 +39,6 @@ def compile_file(path: str) -> int:
     # 3. Otimização da AST (Remove operações inúteis e código morto)
     optimizer = ASTOptimizer()
     ast = optimizer.optimize(ast)
-    
-    if optimizer.optimizations_applied > 0:
-        print("[Otimizador] Otimizações aplicadas:")
-        for nome, count in optimizer.stats.items():
-            if count > 0:
-                print(f"  ├─ {nome:<26} {count}")
-        print(f"  └─ {'Total':<26} {optimizer.optimizations_applied}")
-    else:
-        print("[Otimizador] O código já se encontrava otimizado.")
 
     # 4. Geração de Código (Traduz a AST validada para Assembly da EWVM)
     ewvm_code = generate(ast)
@@ -61,7 +52,17 @@ def compile_file(path: str) -> int:
     print("\n--- Código Máquina Gerado ---")
     print(ewvm_code)
     print("-----------------------------\n")
-    print(f"=== Output gravado em: {out_path} ===")
+    print(f"=== Output gravado em: {out_path} ===\n")
+
+
+    if optimizer.optimizations_applied > 0:
+        print("[Otimizador] Otimizações aplicadas:")
+        for nome, count in optimizer.stats.items():
+            if count > 0:
+                print(f"  ├─ {nome:<26} {count}")
+        print(f"  └─ {'Total':<26} {optimizer.optimizations_applied}\n")
+    else:
+        print("[Otimizador] O código já se encontrava otimizado.\n")
     
     return 0
 
