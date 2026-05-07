@@ -187,17 +187,17 @@ Y = X + (2 * 3)
 
 Resultado da Otimização:
 Neste caso, o motor de Constant Folding deteta a operação estática (2 * 3) e reduz o nó para o literal 6. De seguida, a Constant Propagation reconhece que X tem o valor fixo de 10, substituindo a referência à variável. A AST é simplificada para Y = 16, evitando que a máquina virtual execute instruções PUSHG, PUSHI, MUL e ADD em tempo de execução, gerando diretamente:
-
+```text
 PUSHI 10
 STOREG 0    // X
 PUSHI 16
 STOREG 1    // Y
-
+```
 ## 7.Geração de Código para a Máquina Virtual EWVM
 
 O módulo de geração de código (`codegen.py`) constitui a etapa final do pipeline, sendo responsável por converter a representação intermédia (AST) em código objeto compatível com a Máquina Virtual EWVM. Esta fase baseia-se num modelo de tradução direta, onde cada nó da árvore é visitado para emitir as instruções assembly correspondentes.
 
-### 7.1. Arquitetura Baseada em *Stack* e Avaliação de Expressõesa
+### 7.1. Arquitetura Baseada em *Stack* e Avaliação de Expressões
 
 Dado que a EWVM opera sobre uma *stack* de operandos, a geração de código para expressões utiliza uma travessia em pós-ordem (esquerda, direita, raiz).
 
